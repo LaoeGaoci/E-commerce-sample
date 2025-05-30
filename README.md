@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# E-commerce-sample
 
-## Getting Started
+## 介绍
 
-First, run the development server:
+- 前端原型：[即时设计](https://js.design/f/Yn1hry?p=Op-YPiTbAH&mode=design)
 
-```bash
+- 技术栈：PrimeReact + Next.js(AppRouter)
+
+## 如何启动
+
+```shell
+npm i
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+使用浏览器打开[http://localhost:3000](http://localhost:3000)查看结果。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+您可以通过修改 app/page.tsx 来开始编辑页面。页面会在您编辑文件时自动更新。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+本项目使用 [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) 自动优化并加载 Vercel 的新字体系列 [Geist](https://vercel.com/font)。
 
-## Learn More
+## 更多
 
-To learn more about Next.js, take a look at the following resources:
+要了解更多关于 Next.js ，React，PrimeReact的信息，请查看以下资源：
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js 文档](https://nextjs.org/docs) - 了解 Next.js 的功能和 API。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [学习 Next.js](https://nextjs.org/learn) - 一个交互式的 Next.js 教程。
 
-## Deploy on Vercel
+- React中文：[创建一个 React 应用 – React 中文文档](https://zh-hans.react.dev/learn/creating-a-react-app)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- PrimeReact官网：[PrimeReact - React UI Component Library](https://primereact.org/templates/)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+您可以查看 [Next.js GitHub 代码库](https://github.com/vercel/next.js) - 欢迎您提供反馈和贡献！
