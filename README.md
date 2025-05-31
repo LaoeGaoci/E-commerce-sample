@@ -4,7 +4,7 @@
 
 - 前端原型：[即时设计](https://js.design/f/Yn1hry?p=Op-YPiTbAH&mode=design)
 
-- 技术栈：PrimeReact + Next.js(AppRouter) + TypeScript
+- 技术栈：PrimeReact + Next.js (AppRouter) + TypeScript
 
 ## 如何启动
 
