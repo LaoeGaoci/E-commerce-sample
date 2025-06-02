@@ -1,8 +1,6 @@
-# E-commerce-sample
+# E-commerce-backend
 
 ## 介绍
-
-项目分为两端：前台产品端以及后台管理端
 
 - 前端原型：[即时设计](https://js.design/f/Yn1hry?p=Op-YPiTbAH&mode=design)
 
