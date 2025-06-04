@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "next": "^15.3.3",
+    "primeicons": "^7.0.0",
+    "primereact": "^10.9.6",
+    "react": "^19.1.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.6",
+    "@types/uuid": "^10.0.0"
+  }
+}
