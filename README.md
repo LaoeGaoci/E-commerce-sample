@@ -25,14 +25,11 @@ npm run dev
 
 要了解更多关于 Next.js ，React，PrimeReact的信息，请查看以下资源：
 
+- [nginx配置教程](https://www.cnblogs.com/hanease/p/15890509.html)
 - [Next.js 文档](https://nextjs.org/docs) - 了解 Next.js 的功能和 API。
-
 - [学习 Next.js](https://nextjs.org/learn) - 一个交互式的 Next.js 教程。
-
 - React中文：[创建一个 React 应用 – React 中文文档](https://zh-hans.react.dev/learn/creating-a-react-app)
-
 - TypeScript：[TypeScript中文网 · TypeScript——JavaScript的超集](https://www.tslang.cn/)
-
 - PrimeReact官网：[PrimeReact - React UI Component Library](https://primereact.org/templates/)
 
 您可以查看 [Next.js GitHub 代码库](https://github.com/vercel/next.js) - 欢迎您提供反馈和贡献！
