@@ -8,8 +8,23 @@
 
 - 技术栈：PrimeReact + Next.js (AppRouter) + TypeScript + Nginx
 
-## 如何启动
+## Git commit提交规范
+- type（必须） : commit 的类别，只允许使用下面几个标识：
+  feat : 新功能
+  fix : 修复bug
+  docs : 文档改变
+  style : 代码格式改变
+  refactor : 某个已有功能重构
+  perf : 性能优化
+  test : 增加测试
+  build : 改变了build工具 如 grunt换成了 npm
+  revert : 撤销上一次的 commit
+  chore : 构建过程或辅助工具的变动
+- scope（可选） : 用于说明 commit 影响的范围，比如数据层、控制层、视图层等等，视项目不同而不同。
+- subject（必须） : commit 的简短描述，不超过50个字符。
+遵循 Angular 的提交规范。
 
+## 如何启动
 ```shell
 npm i
 npm run dev
@@ -20,8 +35,8 @@ npm run dev
 您可以通过修改`app/page.tsx` 来开始编辑页面。页面会在您编辑文件时自动更新。
 
 本项目使用 [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) 自动优化并加载 Vercel 的新字体系列 [Geist](https://vercel.com/font)。
-## Nginx的配置
 
+## Nginx的配置
 Nginx版本没有影响，该项目没有用到高端有版本区分的服务，LaoeGaoci的版本为: `nginx-1.26.2`，在Nginx目录下建立文件夹E-commerce/。
 设置`nginx.conf`文件
 ```
@@ -33,8 +48,8 @@ Nginx版本没有影响，该项目没有用到高端有版本区分的服务，
     root   D:/nginx/nginx-1.26.2/E-commerce/;  
   }
 ```
-## 更多
 
+## 更多
 要了解更多关于 Next.js ，React，PrimeReact的信息，请查看以下资源：
 
 - [nginx配置教程](https://www.cnblogs.com/hanease/p/15890509.html)
