@@ -1,0 +1,94 @@
+// 基础颜色与变量
+$primary-color: #0070c0;
+$gray-bg: #f9f9f9;
+$border-color: #e0e0e0;
+$text-color: #333;
+
+// 公共字体
+body {
+  font-family: var(--font-geist-sans), sans-serif;
+  color: $text-color;
+  background-color: $gray-bg;
+}
+
+// 顶部栏
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: 4rem;
+  background-color: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  gap: 0.75rem;
+
+  img {
+    height: 1.5rem;
+  }
+
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .p-inputtext {
+    flex-grow: 1;
+    font-size: 0.875rem;
+  }
+}
+
+// 主体内容区
+main {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  min-height: 100vh;
+  background-color: $gray-bg;
+}
+
+// 底部导航栏
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: 3.5rem;
+  background-color: #ffffff;
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
+
+  .p-tabmenu {
+    width: 100%;
+
+    .p-tabmenu-nav {
+      display: flex;
+      justify-content: space-around;
+
+      .p-tabmenuitem {
+        flex-grow: 1;
+        text-align: center;
+
+        .p-menuitem-link {
+          flex-direction: column;
+          padding: 0.25rem 0;
+
+          .pi {
+            font-size: 1.25rem;
+            margin-bottom: 0.2rem;
+          }
+
+          span {
+            font-size: 0.75rem;
+          }
+        }
+
+        &.p-highlight .p-menuitem-link {
+          color: $primary-color;
+        }
+      }
+    }
+  }
+}
