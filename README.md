@@ -6,7 +6,7 @@
 
 - 前端原型：[即时设计](https://js.design/f/Yn1hry?p=Op-YPiTbAH&mode=design)
 
-- 技术栈：PrimeReact + Next.js (AppRouter) + TypeScript
+- 技术栈：PrimeReact + Next.js (AppRouter) + TypeScript + Nginx
 
 ## 如何启动
 
@@ -20,7 +20,19 @@ npm run dev
 您可以通过修改`app/page.tsx` 来开始编辑页面。页面会在您编辑文件时自动更新。
 
 本项目使用 [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) 自动优化并加载 Vercel 的新字体系列 [Geist](https://vercel.com/font)。
+## Nginx的配置
 
+Nginx版本没有影响，该项目没有用到高端有版本区分的服务，LaoeGaoci的版本为: `nginx-1.26.2`，在Nginx目录下建立文件夹E-commerce/。
+设置`nginx.conf`文件
+```
+  listen  65;
+  server_name  localhost;
+```
+```
+  location / {
+    root   D:/nginx/nginx-1.26.2/E-commerce/;  
+  }
+```
 ## 更多
 
 要了解更多关于 Next.js ，React，PrimeReact的信息，请查看以下资源：
