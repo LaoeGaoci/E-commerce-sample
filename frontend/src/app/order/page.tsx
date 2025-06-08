@@ -91,14 +91,6 @@ const OrderContent = () => {
           >
             待收货
           </Link>
-          {/* <Link
-            href="/order?status=paid"
-            className={`px-4 py-2 text-sm font-medium ${
-              activeTab === 'paid' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-500'
-            }`}
-          >
-            待付款
-          </Link> */}
         </div>
       </div>
 

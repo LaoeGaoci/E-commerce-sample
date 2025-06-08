@@ -1,0 +1,156 @@
+.mypage-container {
+    min-height: 100vh;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+.mypage-card {
+    background: #ffffff;
+    padding: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* 用户信息 */
+.mypage-user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+/* 模块标题 */
+.mypage-order-header,
+.mypage-section-title {
+    font-size: 1.1rem;
+    margin: 1.5rem 0 0.8rem;
+    font-weight: 600;
+    color: #333;
+    text-align: left;
+}
+
+/* ✅ 模块按钮横排 */
+.mypage-order-links,
+.mypage-service-options {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* ✅ “为你挑选”标题居中 */
+.mypage-section-title:last-of-type {
+    text-align: center;
+}
+
+/* 推荐商品区 */
+.mypage-recommendations {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* ✅ 商品卡片结构 */
+.mypage-product-card {
+    width: 100px;
+    text-decoration: none;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 0.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    transition: box-shadow 0.2s;
+}
+
+.mypage-product-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.mypage-product-card h4 {
+    font-size: 0.95rem;
+    margin: 0;
+    color: #333;
+}
+
+.mypage-product-card p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #999;
+}
+
+/* 地址管理样式优化 */
+.mypage-address-item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.mypage-address-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+/* 消息模块样式 */
+.mypage-message-item {
+    background: #fdfdfd;
+    border: 1px solid #eee;
+    padding: 0.75rem;
+    border-radius: 6px;
+    margin-bottom: 0.6rem;
+}
+
+.mypage-message-read {
+    opacity: 0.7;
+}
+
+.mypage-message-actions {
+    margin-top: 0.4rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* 表单 */
+.mypage-form {
+    background: #fff;
+    padding: 1rem;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 340px;
+}
+
+.mypage-form input {
+    width: 100%;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.mypage-form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+/* 响应式优化 */
+@media (max-width: 480px) {
+    .mypage-product-card {
+        text-decoration: none;
+        width: 100%;
+    }
+
+    .mypage-order-links {
+        flex-direction: row;
+        gap: 2rem;
+    }
+
+    .mypage-service-options {
+        flex-direction: row;
+        gap: 0.75rem;
+    }
+
+    .mypage-recommendations {
+        flex-direction: column;
+    }
+}
