@@ -1,6 +1,8 @@
 import { loadFromStorage, saveToStorage } from '../data/localStorageUtil';
 import { Address } from '../data/addresses';
 import { User } from '../data/users';
+import { Message } from '../data/messages';
+
 import { v4 as uuidv4 } from 'uuid';
 
 // 实现用户新增收货地址的逻辑，同步数据
@@ -62,4 +64,39 @@ export const deleteAddress = (userId: string, addressId: string) => {
 
   saveToStorage('addresses', addresses);
   saveToStorage('users', users);
+};
+
+// 删除某条消息（根据 messageId）
+export const deleteMessage = (messageId: string): void => {
+  const messages = loadFromStorage<Message[]>('messages') || [];
+  const updatedMessages = messages.filter(msg => msg.id !== messageId);
+  saveToStorage('messages', updatedMessages);
+};
+
+// 获取某用户的已读消息
+export const getReadMessages = (userId: string): Message[] => {
+  const messages = loadFromStorage<Message[]>('messages') || [];
+  return messages.filter(msg => msg.userId === userId && msg.isRead);
+};
+
+// 获取某用户的未读消息
+export const getUnreadMessages = (userId: string): Message[] => {
+  const messages = loadFromStorage<Message[]>('messages') || [];
+  return messages.filter(msg => msg.userId === userId && !msg.isRead);
+};
+
+// 获取指定用户的所有消息
+export const getMessagesByUser = (userId: string): Message[] => {
+  const all = loadFromStorage<Message[]>('messages') || [];
+  return all.filter(m => m.userId === userId);
+};
+
+// 标记某条消息为已读
+export const markMessageAsRead = (messageId: string): void => {
+  const messages = loadFromStorage<Message[]>('messages') || [];
+  const target = messages.find(m => m.id === messageId);
+  if (target && !target.isRead) {
+    target.isRead = true;
+    saveToStorage('messages', messages);
+  }
 };
