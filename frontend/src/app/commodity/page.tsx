@@ -9,6 +9,7 @@ interface Product {
   name: string;
   price: number;
   imageUrl: string;
+
 }
 
 const CommodityListPage: React.FC = () => {
@@ -40,7 +41,7 @@ const CommodityListPage: React.FC = () => {
             {/* 商品图片 */}
             <div className="w-40 h-40 mr-6">
             <Image
-                src={product.imageUrl}
+                src={process.env.NEXT_PUBLIC_NGINX_URL + product.imageUrl}
                 alt={product.name}
                 width={200}
                 height={200}

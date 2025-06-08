@@ -24,7 +24,7 @@ const OrderPaymentPage: React.FC = () => {
   const orderItems: OrderItem[] = [
     {
         id: '1001', name: '时尚运动鞋', price: 299,
-        imageUrl: 'https://picsum.photos/id/101/200',
+        imageUrl: 'http://localhost:65/R.jpg',
     },
     {
         id: '1002', name: '简约背包', price: 199,
@@ -34,7 +34,14 @@ const OrderPaymentPage: React.FC = () => {
         id: '1003', name: '运动配饰', price: 49,
         imageUrl: 'https://picsum.photos/id/103/200',
     },
-
+    {
+      id: '1004', name: '运动配饰', price: 49,
+      imageUrl: 'https://picsum.photos/id/103/200',
+  },
+  {
+    id: '1005', name: '运动配饰', price: 49,
+    imageUrl: 'https://picsum.photos/id/103/200',
+  },
   ];
 
   // 地址侧边栏状态
@@ -68,13 +75,12 @@ const OrderPaymentPage: React.FC = () => {
   };
 
   return (
-  <div className="flex flex-col min-h-screen bg-gray-100">
-    <div className="bg-white shadow-md container mx-auto rounded-b-lg mb-2 p-1">
+  <div className="bg-white p-4 mb-4 container mx-auto rounded-lg cursor-pointer hover:bg-gray-50">
       <h1 className="text-2xl font-bold text-gray-800 text-center">Pay</h1>
-    </div>
+
       {/* 收货地址可点击区域 */}
       <div 
-        className="bg-white p-4 mb-4 container mx-auto rounded-lg cursor-pointer hover:bg-gray-50"
+        className="bg-blue-50 p-4 w-full rounded-lg cursor-pointer hover:bg-gray-50"
         onClick={() => setIsAddressSidebarOpen(true)}
       >
         <div className="flex items-center justify-between">
@@ -95,12 +101,15 @@ const OrderPaymentPage: React.FC = () => {
         <div className="w-4/5 sm:w-96 bg-white h-[93vh] p-4 shadow-lg transform transition-transform duration-300 ease-in-out">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold text-gray-800">收货地址</h2>
-              <button 
-                className="p-1 rounded-full hover:bg-gray-100"
-                onClick={() => setIsAddressSidebarOpen(false)}
-              >
-                <X className="text-gray-600" />
-              </button>
+            <button 
+              className="p-1 rounded-full hover:bg-gray-100"
+              onClick={(e) => {
+                e.stopPropagation(); // 阻止事件冒泡到父级
+                setIsAddressSidebarOpen(false);
+              }}
+            >
+              <X className="text-gray-600" />
+            </button>
             </div>
             
             <div className="space-y-4">
@@ -134,20 +143,23 @@ const OrderPaymentPage: React.FC = () => {
             </div>
 
             <div className="absolute bottom-4 left-4 right-4">
-              <button
-                className="w-full py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-                onClick={() => setIsAddressSidebarOpen(false)}
-              >
-                确认选择
-              </button>
+            <button
+              className="w-full py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+              onClick={(e) => {
+                e.stopPropagation(); // 阻止事件冒泡
+                setIsAddressSidebarOpen(false);
+              }}
+            >
+              确认选择
+            </button>
             </div>
           </div>
         </div>
       )}
 
       {/* 商品列表 */}
-      <div className="bg-white p-4 mb-4 container mx-auto rounded-lg">
-        <div className="flex justify-between items-center mb-4">
+      <div className="flex-1 overflow-y-auto max-h-[calc(100vh-360px)]">
+        <div className="flex justify-between items-center mb-4 mt-10">
           <span className="font-bold text-gray-800">Product</span>
           <span className="font-bold text-gray-800">Price</span>
         </div>
@@ -178,19 +190,15 @@ const OrderPaymentPage: React.FC = () => {
         </div>
       </div>
 
-      {/* 总价 */}
-      <div className="bg-white p-4 mb-4 container mx-auto rounded-lg">
+      {/* 总价和支付按钮固定在底部 */}
+      <div className="fixed bottom-10 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-md z-10">
         <div className="flex justify-between items-center">
           <span className="text-2xl font-bold text-gray-800">Total:</span>
           <span className="text-2xl font-bold text-gray-800">¥{totalPrice.toFixed(2)}</span>
         </div>
-      </div>
-
-      {/* 支付按钮 */}
-      <div className="bg-white p-4 mb-4 container mx-auto rounded-lg">
         <button
           onClick={handlePayNowClick}
-          className="w-full py-3 bg-blue-500 text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors"
+          className="w-full py-3 mt-2 bg-blue-500 text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors"
         >
           Pay Now
         </button>

@@ -32,7 +32,7 @@ const MyPage: React.FC = () => {
   const recommendedProducts = [
     { 
       id: '101', name: '时尚运动鞋', price: 299,
-      imageUrl: 'https://picsum.photos/id/101/200'
+      imageUrl: 'http://localhost:65/R.jpg'
     },
     { 
       id: '102', name: '无线蓝牙耳机', price: 399,
