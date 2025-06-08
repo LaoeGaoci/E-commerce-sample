@@ -10,7 +10,7 @@
     "clean": "rimraf .next || echo 'No .next folder to delete'"
   },
   "dependencies": {
-    "next": "15.3.3",
+    "next": "^15.3.3",
     "primeicons": "^7.0.0",
     "primereact": "^10.9.6",
     "react": "^19.0.0",
