@@ -124,7 +124,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {
           label: "用户管理",
           icon: "pi pi-users", // 更符合“用户管理”的图标
-          to:'user',
+          to:'/users',
           shortcut: "⌘+U",
           template: itemRenderer,
         },
