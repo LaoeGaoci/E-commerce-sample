@@ -139,21 +139,21 @@ const MyPage: React.FC = () => {
           <Button icon="pi pi-comment" label="我的消息" onClick={() => setIsMessageSidebarOpen(true)} text />
         </div>
 
-      {/* ✅ 猜你喜欢 */}
-      <section className="section">
-        <h2>You May Also Like</h2>
-        <div className="product-grid">
-          {recommendedProducts.map((item) => (
-            <Link href={`/commodity/${item.id}`} key={item.id} className="product-card">
-              <div className="product-img">
-                <img src={`http://localhost:65/${item.image}`} alt={item.name} />
-              </div>
-              <div className="product-title">{item.name}</div>
-              <div className="product-price">${item.price}</div>
-            </Link>
-          ))}
-        </div>
-      </section>
+        {/* ✅ 猜你喜欢 */}
+        <section className="section">
+          <h2>You May Also Like</h2>
+          <div className="product-grid">
+            {recommendedProducts.map((item) => (
+              <Link href={`/commodity/${item.id}`} key={item.id} className="product-card">
+                <div className="product-img">
+                  <img src={`http://localhost:65/${item.image}`} alt={item.name} />
+                </div>
+                <div className="product-title">{item.name}</div>
+                <div className="product-price">${item.price}</div>
+              </Link>
+            ))}
+          </div>
+        </section>
       </Card>
 
       {/* 地址侧边栏 */}
@@ -176,7 +176,7 @@ const MyPage: React.FC = () => {
         <h3>我的消息</h3>
 
         <TabView>
-          <TabPanel header="📬 未读消息">
+          <TabPanel header="未读消息">
             {unreadMessages.length === 0 ? <p style={{ fontSize: '14px' }}>暂无未读消息</p> : null}
             {unreadMessages.map(msg => (
               <div key={msg.id} className="mypage-message-item">
@@ -193,7 +193,7 @@ const MyPage: React.FC = () => {
             ))}
           </TabPanel>
 
-          <TabPanel header="✅ 已读消息">
+          <TabPanel header="已读消息">
             {readMessages.length === 0 ? <p style={{ fontSize: '14px' }}>暂无已读消息</p> : null}
             {readMessages.map(msg => (
               <div key={msg.id} className="mypage-message-item mypage-message-read">
@@ -213,16 +213,26 @@ const MyPage: React.FC = () => {
 
 
       {/* 订单侧边栏 */}
-      <Sidebar visible={isOrderSidebarOpen} position="right" onHide={() => setIsOrderSidebarOpen(false)} className="mypage-sidebar">
+      <Sidebar
+        visible={isOrderSidebarOpen}
+        position="right"
+        onHide={() => setIsOrderSidebarOpen(false)}
+        className="mypage-sidebar"
+      >
         <h3>{orderStatusFilter}</h3>
-        {orders.filter(o => o.status === orderStatusFilter).map(order => (
-          <div key={order.id} className="mypage-order-item">
-            <div>订单号：{order.id}</div>
-            <div>商品数：{order.productList.length}</div>
-            <div>总价：¥{order.totalPrice}</div>
-          </div>
-        ))}
+        <div className="order-card-list">
+          {orders.filter(o => o.status === orderStatusFilter).map(order => (
+            <Link href={`/order/${order.id}`} key={order.id} className="order-card-link">
+              <Card className="order-card" title={`订单号：${order.id}`} subTitle={`状态：${order.status}`}>
+                <p>商品数：{order.productList.length}</p>
+                <p>总价：¥{order.totalPrice}</p>
+                <Button label="查看物流" icon="pi pi-angle-right" link />
+              </Card>
+            </Link>
+          ))}
+        </div>
       </Sidebar>
+
 
       <Dialog header={editingAddress ? '编辑地址' : '添加地址'} visible={isFormOpen} style={{ width: '400px' }} onHide={closeForm} modal>
         <div className="mypage-form">
