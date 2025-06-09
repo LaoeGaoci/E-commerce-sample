@@ -6,19 +6,24 @@ import Footer from '../components/Footer';
 import { loadFromStorage } from '../data/localStorageUtil';
 import { Product } from '../data/products';
 import Link from 'next/link';
+
+// PrimeReact 组件
+import { ListBox } from 'primereact/listbox';
+import { Card } from 'primereact/card';
 import './CategoryPage.scss';
 
-const EmptyPage: React.FC = () => {
-  const [categories, setCategories] = useState<string[]>([]);
-  const [activeCategory, setActiveCategory] = useState('');
+const CategoryPage: React.FC = () => {
+  const [categories, setCategories] = useState<{ label: string; value: string }[]>([]);
+  const [activeCategory, setActiveCategory] = useState<string>('');
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     const products = loadFromStorage<Product[]>('products') || [];
-    const cats = Array.from(new Set(products.map((p) => p.category)));
-    setCategories(cats);
-    if (cats.length > 0) {
-      setActiveCategory(cats[0]);
+    const uniqueCategories = Array.from(new Set(products.map((p) => p.category)));
+    const catOptions = uniqueCategories.map((cat) => ({ label: cat, value: cat }));
+    setCategories(catOptions);
+    if (catOptions.length > 0) {
+      setActiveCategory(catOptions[0].value);
     }
   }, []);
 
@@ -32,36 +37,45 @@ const EmptyPage: React.FC = () => {
     <main className="category-page">
       <Header />
 
-      <section className="category-container">
+      <section className="category-container p-d-flex">
         {/* 左侧分类栏 */}
-        <aside className="category-list">
-          {categories.map((cat) => (
-            <div
-              key={cat}
-              className={`category-item ${cat === activeCategory ? 'active' : ''}`}
-              onClick={() => setActiveCategory(cat)}
-            >
-              {cat}
-            </div>
-          ))}
-        </aside>
+        <div className="category-sidebar">
+          <ListBox
+            value={activeCategory}
+            options={categories}
+            onChange={(e) => setActiveCategory(e.value)}
+            optionLabel="label"
+            className="p-listbox-sm"
+          />
+        </div>
 
         {/* 右侧商品列表 */}
-        <section className="product-results">
+        <div className="category-products">
           {filteredProducts.length > 0 ? (
-            filteredProducts.map((p) => (
-              <Link href={`/commodity/${p.id}`} key={p.id} className="product-card">
-                <div className="product-img">
-                  <img src={`http://localhost:65/${p.image}`} alt={p.name} />
+            <div className="p-grid">
+              {filteredProducts.map((p) => (
+                <div className="p-col-12 p-md-4 p-lg-3" key={p.id}>
+                  <Link href={`/commodity/${p.id}`} className="product-link">
+                    <Card
+                      title={p.name}
+                      subTitle={`$${p.price}`}
+                      className="p-mb-3"
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <img
+                        src={`http://localhost:65/${p.image}`}
+                        alt={p.name}
+                        style={{ width: '100%', objectFit: 'cover', borderRadius: '8px' }}
+                      />
+                    </Card>
+                  </Link>
                 </div>
-                <div className="product-title">{p.name}</div>
-                <div className="product-price">${p.price}</div>
-              </Link>
-            ))
+              ))}
+            </div>
           ) : (
-            <div className="no-result">No products found in this category.</div>
+            <div className="p-m-3">No products found in this category.</div>
           )}
-        </section>
+        </div>
       </section>
 
       <Footer />
@@ -69,4 +83,4 @@ const EmptyPage: React.FC = () => {
   );
 };
 
-export default EmptyPage;
+export default CategoryPage;

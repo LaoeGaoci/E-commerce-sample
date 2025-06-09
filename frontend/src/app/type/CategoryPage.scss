@@ -7,34 +7,23 @@
   background: #f9f9f9;
 }
 
-// 页面主容器：左侧分类 + 右侧商品
 .category-container {
   display: flex;
-  flex: 1;
-  overflow: hidden;
+  padding: 1rem;
+  gap: 1rem;
 }
 
-// 左侧分类栏
-.category-list {
-  width: 100px;
-  background-color: #fff;
-  border-right: 1px solid #eee;
-  overflow-y: auto;
+.category-sidebar {
+  width: 180px;
+  min-width: 160px;
+  background: #fff;
+  padding: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.05);
+}
 
-  .category-item {
-    padding: 0.75rem;
-    text-align: center;
-    font-size: 0.95rem;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-    color: #333;
-
-    &.active {
-      color: #e60023;
-      background-color: #fbecec;
-      font-weight: bold;
-    }
-  }
+.category-products {
+  flex: 1;
 }
 
 // 右侧商品列表
