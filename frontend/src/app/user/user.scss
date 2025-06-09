@@ -1,43 +1,43 @@
 .mypage-container {
-    min-height: 100vh;
-    padding: 0;
+  min-height: 100vh;
+  padding: 0;
 }
 
 .mypage-card {
-    background: #ffffff;
-    padding: 0;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  background: #ffffff;
+  padding: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 /* 用户信息 */
 .mypage-user-info {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 /* 模块标题 */
 .mypage-order-header,
 .mypage-section-title {
-    font-size: 1.1rem;
-    margin: 1.5rem 0 0.8rem;
-    font-weight: 600;
-    color: #333;
-    text-align: left;
+  font-size: 1.1rem;
+  margin: 1.5rem 0 0.8rem;
+  font-weight: 600;
+  color: #333;
+  text-align: left;
 }
 
 /* ✅ 模块按钮横排 */
 .mypage-order-links,
 .mypage-service-options {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 /* ✅ “为你挑选”标题居中 */
-.mypage-section-title:last-of-type {
-    text-align: center;
+.You-may-also-like-title {
+  text-align: center;
 }
 
 /* 推荐商品区 */
@@ -113,75 +113,99 @@
 
 /* 地址管理样式优化 */
 .mypage-address-item {
-    padding: 0.75rem 0;
-    border-bottom: 1px solid #eee;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #eee;
 }
 
 .mypage-address-actions {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 /* 消息模块样式 */
 .mypage-message-item {
-    background: #fdfdfd;
-    border: 1px solid #eee;
-    padding: 0.75rem;
-    border-radius: 6px;
-    margin-bottom: 0.6rem;
+  background: #fdfdfd;
+  border: 1px solid #eee;
+  padding: 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 0.6rem;
 }
 
 .mypage-message-read {
-    opacity: 0.7;
+  opacity: 0.7;
 }
 
 .mypage-message-actions {
-    margin-top: 0.4rem;
-    display: flex;
-    gap: 0.5rem;
+  margin-top: 0.4rem;
+  display: flex;
+  gap: 0.5rem;
 }
 
 /* 表单 */
 .mypage-form {
-    background: #fff;
-    padding: 1rem;
-    border-radius: 10px;
-    width: 100%;
-    max-width: 340px;
+  display: column;
+  background: #fff;
+  padding: 1rem;
+  gap: 5rem;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 340px;
 }
-
+.p-float-label{
+  margin-top: 1rem;
+}
 .mypage-form input {
-    width: 100%;
-    margin-bottom: 0.75rem;
-    padding: 0.5rem;
-    font-size: 0.95rem;
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 0.95rem;
 }
 
 .mypage-form-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.75rem;
+  display: flex;
+  margin-top: 1rem;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+// 订单
+.order-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+
+.order-card-link {
+  text-decoration: none;
+}
+
+.order-card {
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+.order-card:hover {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
 }
 
 /* 响应式优化 */
 @media (max-width: 480px) {
-    .mypage-product-card {
-        text-decoration: none;
-        width: 100%;
-    }
+  .mypage-product-card {
+    text-decoration: none;
+    width: 100%;
+  }
 
-    .mypage-order-links {
-        flex-direction: row;
-        gap: 2rem;
-    }
+  .mypage-order-links {
+    flex-direction: row;
+    gap: 2rem;
+  }
 
-    .mypage-service-options {
-        flex-direction: row;
-        gap: 0.75rem;
-    }
+  .mypage-service-options {
+    flex-direction: row;
+    gap: 0.75rem;
+  }
 
-    .mypage-recommendations {
-        flex-direction: column;
-    }
+  .mypage-recommendations {
+    flex-direction: column;
+  }
 }
