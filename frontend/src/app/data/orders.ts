@@ -5,8 +5,10 @@ export interface Order {
     productId: string;
     quantity: number;
   }[];
-  status: '待收货' | '待发货';
+  status: '待收货' | '待发货' | '待付款' ;
   totalPrice: number;
+  orderType: 'direct' | 'cart'; // 新增订单类型字段
+  cartId?: string; // 如果是购物车订单，记录来源购物车ID
 }
 
 export const initialOrders: Order[] = [
@@ -19,5 +21,7 @@ export const initialOrders: Order[] = [
     ],
     status: '待发货',
     totalPrice: 269.7,
+    orderType:'cart',
+    cartId: '1',
   },
 ];

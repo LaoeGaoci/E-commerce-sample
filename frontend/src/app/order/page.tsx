@@ -1,135 +1,210 @@
 'use client';
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
-import { ArrowLeft } from 'react-feather';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
+import { Address } from '../data/addresses';
+import { Cart } from '../data/carts';
+import { Product } from '../data/products';
+import { loadFromStorage, saveToStorage } from '../data/localStorageUtil';
+import { checkoutCart } from './orderService';
+import './order.scss';
+
+import { Card } from 'primereact/card';
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
 
 interface OrderItem {
   id: string;
   name: string;
   price: number;
+  imageUrl: string;
   quantity: number;
-  status: 'shipping' | 'delivering' | 'paid' | 'completed';
 }
 
-const shippingOrders: OrderItem[] = [
-  { id: '1001', name: '时尚运动鞋', price: 299, quantity: 1, status: 'shipping' },
-  { id: '1002', name: '简约背包', price: 199, quantity: 2, status: 'shipping' },
-];
+const OrderPaymentPage: React.FC = () => {
+  const router = useRouter();
+  const userId = '1'; // 假设当前用户ID为1
 
-const deliveringOrders: OrderItem[] = [
-  { id: '1003', name: '无线蓝牙耳机', price: 399, quantity: 1, status: 'delivering' },
-  { id: '1004', name: '智能手表', price: 899, quantity: 1, status: 'delivering' },
-];
+  // 状态管理
+  const [isAddressSidebarOpen, setIsAddressSidebarOpen] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [cart, setCart] = useState<Cart | null>(null);
+  const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
+  const [isPaymentSuccessModalOpen, setPaymentSuccessModalOpen] = useState(false);
 
-const paidOrders: OrderItem[] = [
-
-];
-
-const ordersData: Record<string, OrderItem[]> = {
-  shipping: shippingOrders,
-  delivering: deliveringOrders,
-  paid: paidOrders,
-  all: [...shippingOrders, ...deliveringOrders, ...paidOrders],
-};
-
-// 提取核心逻辑到带 Suspense 的子组件
-const OrderContent = () => {
-  const [activeTab, setActiveTab] = useState<'shipping' | 'delivering' | 'paid' | 'all'>('all');
-  const [filteredOrders, setFilteredOrders] = useState<OrderItem[]>(ordersData.all);
-  const searchParams = useSearchParams();
-
+  // 获取地址和购物车数据
   useEffect(() => {
-    const status = searchParams.get('status') as typeof activeTab | null;
-    const validStatus = status && ['shipping', 'delivering', 'paid', 'all'].includes(status)
-      ? status
-      : 'all';
+    const storedAddresses = loadFromStorage<Address[]>('addresses') || [];
+    const userAddresses = storedAddresses.filter(addr => addr.userId === userId);
+    setAddresses(userAddresses);
 
-    setActiveTab(validStatus);
-    setFilteredOrders(ordersData[validStatus]);
-  }, [searchParams]);
+    if (userAddresses.length > 0 && !selectedAddress) {
+      setSelectedAddress(userAddresses[0].id);
+    }
+
+    const carts: Cart[] = loadFromStorage<Cart[]>('carts') || [];
+    const userCart = carts.find(c => c.userId === userId) || null;
+
+    if (userCart) {
+      setCart(userCart);
+      const products = loadFromStorage<Product[]>('products') || [];
+
+      const items = userCart.products.map(item => {
+        const product = products.find(p => p.id === item.productId);
+        return {
+          id: item.productId,
+          name: product?.name || '未知商品',
+          price: product?.price || 0,
+          imageUrl: product?.image || '/images/default.jpg',
+          quantity: item.quantity,
+        };
+      });
+      setOrderItems(items);
+    }
+  }, [userId, selectedAddress]);
+
+  // 当前地址
+  const currentAddress = addresses.find(addr => addr.id === selectedAddress);
+
+  // 总价计算
+  const totalPrice = useMemo(() => {
+    return orderItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  }, [orderItems]);
+
+  // 支付处理
+  const handlePayNowClick = () => {
+    if (!cart) return;
+
+    // 调用购物车结算服务
+    const newOrder = checkoutCart(userId, cart.id);
+    
+    if (newOrder) {
+      setPaymentSuccessModalOpen(true);
+      // 更新本地购物车状态
+      setCart(prev => prev ? { ...prev, products: [], totalPrice: 0 } : null);
+      setOrderItems([]);
+    }
+  };
+
+  // 关闭支付成功弹窗
+  const handleCloseModal = () => {
+    setPaymentSuccessModalOpen(false);
+    router.push('/orders');
+  };
+
+  // 地址选择界面
+  const renderAddressSidebar = () => (
+    <Dialog
+      visible={isAddressSidebarOpen}
+      onHide={() => setIsAddressSidebarOpen(false)}
+      header="Choose Address"
+      style={{ width: '90%', maxWidth: '400px' }}
+    >
+      <div className="address-list">
+        {addresses.map((address) => (
+          <div
+            key={address.id}
+            className={`address-item ${selectedAddress === address.id ? 'selected' : ''}`}
+            onClick={() => setSelectedAddress(address.id)}
+          >
+            <div className="address-name-phone">
+              {address.receiverName} {address.receiverPhone}
+            </div>
+            <div className="address-detail">{address.receiverAddress}</div>
+          </div>
+        ))}
+        <Button
+          label="Confirm Selection"
+          icon="pi pi-check"
+          className="mt-3 w-full"
+          onClick={() => setIsAddressSidebarOpen(false)}
+        />
+      </div>
+    </Dialog>
+  );
+
+  // 支付成功弹窗
+  const renderSuccessModal = () => (
+    <Dialog
+      visible={isPaymentSuccessModalOpen}
+      onHide={handleCloseModal}
+      header=""
+      style={{ width: '300px' }}
+      modal
+    >
+      <div className="text-center">
+        <i className="pi pi-check-circle text-green-500 text-5xl mb-4" />
+        <h2 className="text-xl font-bold text-gray-800 mb-2">Payment Successful!</h2>
+        <p className="mb-4">Your order has been placed successfully.</p>
+        <Button label="OK" icon="pi pi-check" onClick={handleCloseModal} />
+      </div>
+    </Dialog>
+  );
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
-      {/* 顶部导航栏 */}
-      <div className="flex justify-between items-center p-4 bg-white shadow-sm">
-        {/* 添加返回按钮 */}
-        <Link href="/user" className="flex items-center text-gray-700 hover:text-blue-500 transition-colors">
-          <ArrowLeft size={20} className="mr-1" />
-          <span>返回</span>
-        </Link>
-        <h1 className="text-xl font-bold text-gray-800">我的订单</h1>
-        <div style={{ width: '20px' }} /> {/* 占位符保持标题居中 */}
-      </div>
+    <div className="payment-container">
+      <Card className="mypage-card">
+        <h1 className="text-2xl font-bold text-gray-800 text-center">Pay</h1>
 
-      {/* 订单状态标签页 */}
-      <div className="bg-white p-2 shadow-sm mb-4">
-        <div className="flex justify-around">
-          <Link
-            href="/order?status=all"
-            className={`px-4 py-2 text-sm font-medium ${
-              activeTab === 'all' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-500'
-            }`}
-          >
-            全部
-          </Link>
-          <Link
-            href="/order?status=shipping"
-            className={`px-4 py-2 text-sm font-medium ${
-              activeTab === 'shipping' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-500'
-            }`}
-          >
-            待发货
-          </Link>
-          <Link
-            href="/order?status=delivering"
-            className={`px-4 py-2 text-sm font-medium ${
-              activeTab === 'delivering' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-500'
-            }`}
-          >
-            待收货
-          </Link>
+        {/* 收货地址区域 */}
+        <div className="mypage-address-item" onClick={() => setIsAddressSidebarOpen(true)}>
+          <div>
+            {currentAddress ? (
+              <>
+                <div>{currentAddress.receiverName} - {currentAddress.receiverPhone}</div>
+                <div>{currentAddress.receiverAddress}</div>
+              </>
+            ) : (
+              <div>Please select a shipping address</div>
+            )}
+          </div>
+          <div className="flex justify-end mt-2">
+            <button className="text-blue-500 hover:text-blue-700">
+              <i className="pi pi-pencil mr-1" />
+              Edit Address
+            </button>
+          </div>
         </div>
-      </div>
 
-      {/* 订单列表 */}
-      <div className="flex-1 p-4 overflow-y-auto">
-        {filteredOrders.length > 0 ? (
-          filteredOrders.map((order) => (
-            <Link href={`/commodity/${order.id}`} key={order.id}>
-              <div className="bg-white rounded-lg shadow-sm mb-4 overflow-hidden border border-gray-200">
-                <div className="p-4">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="font-medium text-gray-800">{order.name}</h3>
-                      <p className="text-sm text-gray-500 mt-1">数量: {order.quantity}</p>
-                    </div>
-                    <span className="text-gray-700 font-bold">¥{order.price * order.quantity}</span>
-                  </div>
-                </div>
-                <div className="bg-gray-50 px-4 py-2 text-right text-xs text-gray-500">
-                  状态: {order.status === 'shipping' ? '待发货' : order.status === 'delivering' ? '待收货' : '待支付'}
-                </div>
+        {/* 商品列表 */}
+        <h3 className="mypage-section-title">—— Products List ——</h3>
+        <div className="mypage-recommendations">
+          {orderItems.map((item) => (
+            <Link key={item.id} href={`/commodity/${item.id}`} className="mypage-product-card">
+              <Image src={item.imageUrl} alt={item.name} width={80} height={80} />
+              <div className="product-details">
+                <h4>{item.name}</h4>
+                <p>¥{item.price.toFixed(2)} × {item.quantity}</p>
               </div>
             </Link>
-          ))
-        ) : (
-          <div className="text-center text-gray-500 mt-10">暂无订单</div>
-        )}
+          ))}
+        </div>
+      </Card>
+
+      {/* 底部支付栏 */}
+      <div className="payment-summary">
+        <div className="total-amount">
+          <span>Total:</span>
+          <span>¥{totalPrice.toFixed(2)}</span>
+        </div>
+        <button 
+          className="payment-button" 
+          onClick={handlePayNowClick}
+          disabled={!cart?.products.length}
+        >
+          <i className="pi pi-credit-card mr-2" />
+          Pay Now
+        </button>
       </div>
+
+      {/* 弹窗组件 */}
+      {renderAddressSidebar()}
+      {renderSuccessModal()}
     </div>
   );
 };
 
-// 主页面组件
-const OrdersPage = () => {
-  return (
-    <Suspense fallback="加载中...">
-      <OrderContent />
-    </Suspense>
-  );
-};
-
-export default OrdersPage;
+export default OrderPaymentPage;
