@@ -3,7 +3,6 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Avatar } from 'primereact/avatar';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
@@ -45,7 +44,7 @@ const MyPage: React.FC = () => {
   });
 
   const [recommendedProducts] = useState<Product[]>(() => {
-    return (loadFromStorage<Product[]>('products') ?? []).filter(p => p.isHot).slice(0, 4);
+    return (loadFromStorage<Product[]>('products') ?? []).filter(p => p.isHot).slice(0, 6);
   });
 
   // 消息定义
@@ -140,16 +139,21 @@ const MyPage: React.FC = () => {
           <Button icon="pi pi-comment" label="我的消息" onClick={() => setIsMessageSidebarOpen(true)} text />
         </div>
 
-        <h3 className="mypage-section-title">—— You Also Like ——</h3>
-        <div className="mypage-recommendations">
-          {recommendedProducts.map(product => (
-            <Link key={product.id} href={`/commodity/${product.id}`} className="mypage-product-card">
-              <Image src={`/${product.image}`} alt={product.name} width={150} height={150} />
-              <h4>{product.name}</h4>
-              <p>¥{product.price}</p>
+      {/* ✅ 猜你喜欢 */}
+      <section className="section">
+        <h2>You May Also Like</h2>
+        <div className="product-grid">
+          {recommendedProducts.map((item) => (
+            <Link href={`/commodity/${item.id}`} key={item.id} className="product-card">
+              <div className="product-img">
+                <img src={`http://localhost:65/${item.image}`} alt={item.name} />
+              </div>
+              <div className="product-title">{item.name}</div>
+              <div className="product-price">${item.price}</div>
             </Link>
           ))}
         </div>
+      </section>
       </Card>
 
       {/* 地址侧边栏 */}

@@ -17,7 +17,7 @@ export default function HomePage() {
   const ads = [
     'http://localhost:65/ad1.png',
     'http://localhost:65/ad2.png',
-    'http://localhost:65/ad3.png'
+    'http://localhost:65/ad4.png'
   ];
 
   useEffect(() => {
