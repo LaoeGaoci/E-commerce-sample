@@ -50,6 +50,8 @@ export const checkoutCart = (userId: string) => {
     productList: [...cart.products],
     status: '待发货',
     totalPrice,
+    orderType: 'cart',
+    cartId: cart.id
   };
 
   orders.push(newOrder);
