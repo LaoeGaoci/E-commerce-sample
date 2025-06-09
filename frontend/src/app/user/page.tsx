@@ -19,9 +19,32 @@ import { addAddress, updateAddress, deleteAddress as deleteAddressService } from
 import { Message } from '../data/messages';
 import { getMessagesByUser, markMessageAsRead, deleteMessage } from './userService';
 import { TabView, TabPanel } from 'primereact/tabview';
-
+import { useRouter } from 'next/navigation';
+import { User } from '../data/users';
 
 const MyPage: React.FC = () => {
+
+  const router = useRouter();
+  // 新增用户状态 ↓
+  const [currentUser] = useState<User | null>(() => {
+    return loadFromStorage<User>('currentUser');
+  });
+
+  // 新增登录验证 ↓（放在所有状态声明之后，return之前）
+  if (!currentUser) {
+    return (
+      <div className="mypage-container">
+        <Card className="mypage-card">
+          <h2>请先登录</h2>
+          <Button 
+            label="前往登录" 
+            onClick={() => router.push('/login')}
+          />
+        </Card>
+      </div>
+    );
+  }
+  
   const userId = '1';
   const [isMessageSidebarOpen, setIsMessageSidebarOpen] = useState(false);
   const [isAddressSidebarOpen, setIsAddressSidebarOpen] = useState(false);
@@ -117,12 +140,24 @@ const MyPage: React.FC = () => {
   return (
     <div className="mypage-container">
       <Card className="mypage-card">
-        <div className="mypage-user-info">
-          <Avatar icon="pi pi-user" shape="circle" size="xlarge" style={{ marginRight: '1rem' }} />
-          <div>
-            <h2>Freedom</h2>
-          </div>
+      <div className="mypage-user-info">
+        <Avatar icon="pi pi-user" shape="circle" size="xlarge" style={{ marginRight: '1rem' }} />
+        <div>
+          <h2>{currentUser.name}</h2>
+          {/* 新增退出按钮 ↓ */}
+          <Button 
+            icon="pi pi-sign-out" 
+            label="退出登录"
+            onClick={() => {
+              localStorage.removeItem('currentUser');
+              router.push('/login'); // 改为跳转到登录页
+            }}
+            severity="warning"
+            text
+            className="mt-2"
+          />
         </div>
+      </div>
 
         <div className="mypage-order-header">
           <h3>我的订单</h3>
