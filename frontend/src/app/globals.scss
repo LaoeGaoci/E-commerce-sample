@@ -1,6 +1,5 @@
 // 基础颜色与变量
 $primary-color: #0070c0;
-$gray-bg: #f9f9f9;
 $border-color: #e0e0e0;
 $text-color: #333;
 
@@ -8,7 +7,7 @@ $text-color: #333;
 body {
   font-family: var(--font-geist-sans), sans-serif;
   color: $text-color;
-  background-color: $gray-bg;
+  background-color: #ffffff;
 }
 
 // 顶部栏
@@ -43,10 +42,10 @@ header {
 
 // 主体内容区
 main {
-  padding-top: 4rem;
+  padding-top: 3.6rem;
   padding-bottom: 4rem;
-  min-height: 100vh;
-  background-color: $gray-bg;
+  min-height: 80vh;
+  background-color: #ffffff;
 }
 
 // 底部导航栏
