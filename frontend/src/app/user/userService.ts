@@ -100,3 +100,31 @@ export const markMessageAsRead = (messageId: string): void => {
     saveToStorage('messages', messages);
   }
 };
+
+
+// 用户注册
+export const registerUser = (username: string, password: string): User => {
+  const users = loadFromStorage<User[]>('users') || [];
+  
+  if (users.some(u => u.name === username)) {
+    throw new Error('用户名已存在');
+  }
+
+  const newUser: User = {
+    id: uuidv4(),
+    name: username,
+    password, // 明文
+    addressIds: [],
+    messageIds: []
+  };
+
+  users.push(newUser);
+  saveToStorage('users', users);
+  return newUser;
+};
+
+// 用户登录验证
+export const loginUser = (username: string, password: string): User | null => {
+  const users = loadFromStorage<User[]>('users') || [];
+  return users.find(u => u.name === username && u.password === password) || null;
+};
