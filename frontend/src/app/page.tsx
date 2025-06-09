@@ -9,6 +9,7 @@ import { Product } from './data/products';
 import './HomePage.scss';
 
 export default function HomePage() {
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [hotProducts, setHotProducts] = useState<Product[]>([]);
   const [recommended, setRecommended] = useState<Product[]>([]);
   const [currentAd, setCurrentAd] = useState(0);
@@ -22,6 +23,8 @@ export default function HomePage() {
 
   useEffect(() => {
     const all = loadFromStorage<Product[]>('products') || [];
+    setAllProducts(all);
+
     const shuffled = [...all].sort(() => Math.random() - 0.5);
     const hot = shuffled.filter(p => p.isHot).slice(0, 8);
     const recommend = shuffled.filter(p => !hot.find(h => h.id === p.id)).slice(0, 6);
@@ -37,8 +40,6 @@ export default function HomePage() {
     }, 3000);
     return () => clearInterval(interval);
   }, [ads.length, paused]);
-
-  const allProducts = loadFromStorage<Product[]>('products') || [];
 
   return (
     <main className="homepage">

@@ -57,7 +57,7 @@ const EmptyPage: React.FC = () => {
                 <div className="cart-item-info">
                   <div className="cart-item-name">{product.name}</div>
                   <div className="cart-item-price">
-                    {item.quantity} × ¥{product.price.toFixed(2)}
+                    {item.quantity} × ${product.price.toFixed(2)}
                   </div>
                 </div>
                 <button
@@ -77,7 +77,7 @@ const EmptyPage: React.FC = () => {
           <div className="cart-bottom">
             <div className="cart-subtotal">
               <span>Subtotal:</span>
-              <span className="subtotal-price">¥{subtotal.toFixed(2)}</span>
+              <span className="subtotal-price">${subtotal.toFixed(2)}</span>
             </div>
             <button className="checkout-btn">Check Out</button>
           </div>
