@@ -76,7 +76,12 @@ export default function LoginPage() {
             label={isRegisterMode ? 'Already have an account? Login' : "Don't have an account? Register"}
             type="button"
             className="p-button-text toggle-button"
-            onClick={() => setIsRegisterMode(!isRegisterMode)}
+            onClick={() => {
+              setIsRegisterMode(!isRegisterMode);
+              setUsername('');
+              setPassword('');
+              setErrorMessage('');
+            }}
           />
         </form>
       </Card>
