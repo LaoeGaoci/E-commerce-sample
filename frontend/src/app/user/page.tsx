@@ -27,7 +27,10 @@ const MyPage: React.FC = () => {
 
   const router = useRouter();
 
-  const userId = '1';
+  const currentUser = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('currentUser') || '{}') : null;
+  const userId = currentUser?.id || '';
+  const userName = currentUser?.name || 'Guest';
+
   const [isMessageSidebarOpen, setIsMessageSidebarOpen] = useState(false);
   const [isAddressSidebarOpen, setIsAddressSidebarOpen] = useState(false);
   const [isOrderSidebarOpen, setIsOrderSidebarOpen] = useState(false);
@@ -125,22 +128,18 @@ const MyPage: React.FC = () => {
     <div className="mypage-container">
       <Card className="mypage-card">
         <div className="mypage-user-info">
-          <Avatar icon="pi pi-user" shape="circle" size="xlarge" style={{ marginRight: '1rem' }} />
-          <div>
-            <h2>F</h2>
-            {/* 新增退出按钮 ↓ */}
-            <Button
-              icon="pi pi-sign-out"
-              label="退出登录"
-              onClick={() => {
-                localStorage.removeItem('currentUser');
-                router.push('/login'); // 改为跳转到登录页
-              }}
-              severity="warning"
-              text
-              className="mt-2"
-            />
-          </div>
+          <Avatar icon="pi pi-user" image="https://primefaces.org/cdn/primereact/images/avatar/amyelsner.png" shape="circle" size="xlarge" style={{ marginRight: '1rem' }} />
+          <h2>{userName}</h2>
+          <Button
+            icon="pi pi-sign-out"
+            label="logout"
+            onClick={() => {
+              localStorage.removeItem('currentUser');
+              router.push('/user/login'); // 改为跳转到登录页
+            }}
+            severity="warning"
+            text
+          />
         </div>
 
         <div className="mypage-order-header">

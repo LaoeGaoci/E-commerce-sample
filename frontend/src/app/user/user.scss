@@ -12,8 +12,9 @@
 /* 用户信息 */
 .mypage-user-info {
   display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
+  flex-direction: row;
+  margin-bottom: 3rem;
+  gap: 1rem;
 }
 
 /* 模块标题 */
