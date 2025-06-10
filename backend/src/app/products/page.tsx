@@ -10,14 +10,14 @@ import { InputText } from 'primereact/inputtext';
 import { Dialog } from 'primereact/dialog';
 import { InputNumber } from 'primereact/inputnumber';
 import { Dropdown } from 'primereact/dropdown';
-import { Product, initialProducts } from '@/mock/products';
+import { Product, initialProducts } from '../../../../frontend/src/app/data/products';
 import { saveToStorage, loadFromStorage } from '@/mock/localStorageUtil';
 
 
 
 export default function ProductPage() {
     const [products, setProducts] = useState<Product[]>([]);
-    const [layout, setLayout] = useState<'grid' | 'list'>('grid');
+    const [layout, setLayout] = useState<'grid' | 'list' |(string & Record<string, unknown>)>('grid');
     const [searchText, setSearchText] = useState('');
     const [showAddDialog, setShowAddDialog] = useState(false);
     const [editProduct, setEditProduct] = useState<Product | null>(null);
@@ -70,7 +70,7 @@ export default function ProductPage() {
                 'border-top-1 surface-border': index !== 0,
             })}>
                 <img className="w-9 sm:w-16rem xl:w-10rem shadow-2 block mx-auto border-round"
-                     src={`/images/products/${product.image}`}
+                     src={`http://localhost:65/images/${product.image}`}
                      alt={product.name}
                 />
                 <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
@@ -113,7 +113,7 @@ export default function ProductPage() {
                 </div>
                 <div className="flex flex-column align-items-center gap-3 py-5">
                     <img className="w-9 shadow-2 border-round"
-                         src={`/images/products/${product.image}`}
+                         src={`http://localhost:65/images/${product.image}`}
                          alt={product.name}
                     />
                     <div className="text-2xl font-bold">{product.name}</div>
@@ -134,7 +134,7 @@ export default function ProductPage() {
             </div>
         </div>
     );
-
+    // (item: any, layout?: "list" | "grid" | (string & Record<string, unknown>) | undefined) => ReactNode
     const itemTemplate = (product: Product, layout: string, index: number) => {
         if (!product) return;
         return layout === 'list' ? listItem(product, index) : gridItem(product);

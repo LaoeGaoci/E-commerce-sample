@@ -6,7 +6,7 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
-import { InputTextarea } from 'primereact/inputtextarea';  // ✅
+import { InputTextarea } from 'primereact/inputtextarea';  
 import { Tag } from 'primereact/tag';
 import { Toast } from 'primereact/toast';
 

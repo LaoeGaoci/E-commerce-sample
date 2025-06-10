@@ -7,7 +7,8 @@ import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { Tag } from 'primereact/tag';
-import { type User, initialUsers } from '@/mock/users';
+import { type User, initialUsers } from '../../../../frontend/src/app/data/users';
+
 import { loadFromStorage, saveToStorage } from '@/mock/localStorageUtil';
 
 const STORAGE_KEY = 'users-data';

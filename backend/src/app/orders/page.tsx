@@ -9,7 +9,8 @@ import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
 
-import { type Order, initialOrders } from '@/mock/orders';
+import { type Order, initialOrders } from '../../../../frontend/src/app/data/orders';
+
 import { saveToStorage, loadFromStorage } from '@/mock/localStorageUtil';
 
 const STORAGE_KEY = 'orders_data';
@@ -40,7 +41,7 @@ const Orders = () => {
 
   const statusBodyTemplate = (row: Order) => {
     const severity = row.status === '待收货' ? 'success' : 'warning';
-    return <Tag value={row.status} severity={severity as any} />;
+    return <Tag value={row.status} severity={severity } />;
   };
 
   const actionBodyTemplate = (row: Order) => (
@@ -59,7 +60,7 @@ const Orders = () => {
   };
 
   const markAsDelivered = (id: string) => {
-    const updated = orders.map(order =>
+    const updated:Order[] = orders.map(order =>
       order.id === id ? { ...order, status: '待收货' } : order
     );
     updateOrders(updated);
