@@ -2,8 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import { loadFromStorage } from '../data/localStorageUtil';
 import { Product } from '../data/products';
 import Link from 'next/link';
@@ -40,8 +38,6 @@ const CategoryPage: React.FC = () => {
 
   return (
     <main className="category-page">
-      <Header />
-
       <section className="category-container p-d-flex">
         {/* 左侧分类栏 */}
         <div className="category-sidebar">
@@ -82,8 +78,6 @@ const CategoryPage: React.FC = () => {
           )}
         </div>
       </section>
-
-      <Footer />
     </main>
   );
 };

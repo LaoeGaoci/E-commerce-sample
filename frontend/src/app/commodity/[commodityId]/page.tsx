@@ -1,12 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { addToCart } from '../../cart/cartService';
-import { buyNow } from '../../order/orderService'; // ✅ 引入 buyNow 方法
+import { buyNow } from '../../order/orderService';
 import { loadFromStorage } from '../../data/localStorageUtil';
 import { Product } from '../../data/products';
 import './ProductPage.scss';
@@ -24,7 +22,7 @@ const EmptyPage: React.FC = () => {
   const product = products.find((p) => p.id === commodityId);
 
   if (!product) {
-    return <div className="p-4 text-center text-red-500">商品不存在或参数错误</div>;
+    return <div className="p-4 text-center text-red-500">No Product</div>;
   }
 
   const recommended = products.filter(p => p.id !== product.id).slice(0, 4);
@@ -34,19 +32,16 @@ const EmptyPage: React.FC = () => {
   };
 
   const handleBuyNow = () => {
-    const userId = '1'; // 模拟用户ID
-    const order = buyNow(userId, product.id, quantity); // ✅ 直接生成订单
+    const order = buyNow(userId, product.id, quantity); 
     if (order) {
       router.push('/order');
     } else {
-      alert('下单失败，商品不存在');
+      alert('No Product');
     }
   };
 
   return (
     <main className="product-page">
-      <Header />
-
       <section className="product-info">
         <h1 className="product-title">{product.name}</h1>
         <p className="product-subtitle">{product.description}</p>
@@ -91,8 +86,6 @@ const EmptyPage: React.FC = () => {
           ))}
         </div>
       </section>
-
-      <Footer />
     </main>
   );
 };

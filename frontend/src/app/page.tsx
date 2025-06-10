@@ -1,10 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Header from './components/Header';
-import Footer from './components/Footer';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { loadFromStorage } from './data/localStorageUtil';
 import { Product } from './data/products';
 import { Image } from 'primereact/image';
@@ -45,8 +42,6 @@ export default function HomePage() {
 
   return (
     <main className="homepage">
-      <Header />
-
       {/* 轮播图 */}
       <section
         className="banner-carousel"
@@ -109,8 +104,6 @@ export default function HomePage() {
           ))}
         </div>
       </section>
-
-      <Footer />
     </main>
   );
 }

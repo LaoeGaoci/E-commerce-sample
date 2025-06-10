@@ -11,6 +11,7 @@ import { loadFromStorage } from '../data/localStorageUtil';
 import { Order } from '../data/orders';
 import { Product } from '../data/products';
 import { useRouter } from 'next/navigation';
+import { markOrderAsReceived } from './orderService';
 import './order.scss';
 
 export default function OrderPage() {
@@ -41,6 +42,7 @@ export default function OrderPage() {
   // 示例按钮触发付款：
   const handlePayNow = (orderId: string) => {
     setSelectedOrderId(orderId);
+    markOrderAsReceived(orderId); // 付款成功后从待发货改为待收货
     setShowSuccess(true); // 弹出成功提示
   };
 
