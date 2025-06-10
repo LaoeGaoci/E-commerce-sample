@@ -115,7 +115,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           label: "退出登录",
           icon: "pi pi-sign-out",
           shortcut: "⌘+Q",
-          to: "/backend/login",
+          to: "/user/login",
           template: itemRenderer,
         },
       ],
