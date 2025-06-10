@@ -2,13 +2,13 @@
 
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { loadFromStorage } from '../data/localStorageUtil';
 import { Cart } from '../data/carts';
 import { Product } from '../data/products';
 import { removeFromCart } from './cartService';
+import { Image } from 'primereact/image';
 import './CartPage.scss';
 
 const EmptyPage: React.FC = () => {
@@ -48,16 +48,16 @@ const EmptyPage: React.FC = () => {
             return (
               <Link href={`/commodity/${product.id}`} key={product.id} className="cart-item">
                 <Image
-                  src={`http://localhost:65/${product.image}`}
+                  src={process.env.NEXT_PUBLIC_NGINX_URL + product.image}
                   alt={product.name}
-                  width={80}
-                  height={80}
+                  width="80"
+                  height="80"
                   className="cart-item-img"
                 />
                 <div className="cart-item-info">
                   <div className="cart-item-name">{product.name}</div>
                   <div className="cart-item-price">
-                    {item.quantity} × ${product.price.toFixed(2)}
+                    {item.quantity} x ${product.price.toFixed(2)}
                   </div>
                 </div>
                 <button
@@ -65,7 +65,7 @@ const EmptyPage: React.FC = () => {
                   onClick={(e) => handleRemove(e, product.id)}
                   aria-label="Remove item"
                 >
-                  ×
+                  x
                 </button>
               </Link>
             );
