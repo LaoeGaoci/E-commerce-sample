@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import Link from 'next/link';
 import { loadFromStorage } from './data/localStorageUtil';
 import { Product } from './data/products';
+import { Image } from 'primereact/image';
 import './HomePage.scss';
 
 export default function HomePage() {
@@ -77,7 +78,7 @@ export default function HomePage() {
           {hotProducts.map((product) => (
             <Link href={`/commodity/${product.id}`} key={product.id} className="product-card">
               <div className="product-img">
-                <img src={`http://localhost:65/${product.image}`} alt={product.name} />
+                <Image src={process.env.NEXT_PUBLIC_NGINX_URL + product.image} alt={product.name} />
               </div>
               <div className="product-title">{product.name}</div>
               <div className="product-price">${product.price}</div>
@@ -93,7 +94,7 @@ export default function HomePage() {
           {recommended.map((product) => (
             <Link href={`/commodity/${product.id}`} key={product.id} className="product-card">
               <div className="product-img">
-                <img src={`http://localhost:65/${product.image}`} alt={product.name} />
+                <Image src={process.env.NEXT_PUBLIC_NGINX_URL + product.image} alt={product.name} />
               </div>
               <div className="product-title">{product.name}</div>
               <div className="product-price">${product.price}</div>

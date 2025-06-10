@@ -7,14 +7,14 @@ import { Product } from '../../data/products';
 import { Card } from 'primereact/card';
 import { Steps } from 'primereact/steps';
 import { Button } from 'primereact/button';
-import Image from 'next/image';
+import { Image } from 'primereact/image';
 import './OrderDetail.scss';
-
-const OrderDetailPage = () => {
+import { useRouter } from 'next/navigation';
+export default function OrderDetailPage() {
   const { id } = useParams();
   const order = (loadFromStorage<Order[]>('orders') ?? []).find(o => o.id === id);
   const products = loadFromStorage<Product[]>('products') ?? [];
-
+const router = useRouter();
   if (!order) return <p style={{ padding: '2rem' }}>订单不存在</p>;
 
   const stepItems = [
@@ -51,10 +51,10 @@ const OrderDetailPage = () => {
             <Card key={product.id} className="order-product-card">
               <div className="order-product-content">
                 <Image
-                  src={`http://localhost:65/${product.image}`}
+                  src={process.env.NEXT_PUBLIC_NGINX_URL + product.image}
                   alt={product.name}
-                  width={100}
-                  height={100}
+                  width='100'
+                  height='100'
                   className="product-image"
                 />
                 <div className="product-details">
@@ -71,10 +71,8 @@ const OrderDetailPage = () => {
 
       <div className="order-total">
         <h3>订单总价：¥{order.totalPrice.toFixed(2)}</h3>
-        <Button label="返回我的订单" icon="pi pi-arrow-left" className="mt-3" onClick={() => history.back()} />
+        <Button label="返回我的订单" icon="pi pi-arrow-left" className="mt-3" onClick={() => router.push(`/user`)} />
       </div>
     </div>
   );
 };
-
-export default OrderDetailPage;

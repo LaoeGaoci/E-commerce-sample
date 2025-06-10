@@ -20,39 +20,18 @@ import { Message } from '../data/messages';
 import { getMessagesByUser, markMessageAsRead, deleteMessage } from './userService';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { useRouter } from 'next/navigation';
-import { User } from '../data/users';
 
 import { Image } from 'primereact/image';
 
 const MyPage: React.FC = () => {
 
   const router = useRouter();
-  // 新增用户状态 ↓
-  const [currentUser] = useState<User | null>(() => {
-    return loadFromStorage<User>('currentUser');
-  });
 
-  // 新增登录验证 ↓（放在所有状态声明之后，return之前）
-  if (!currentUser) {
-    return (
-      <div className="mypage-container">
-        <Card className="mypage-card">
-          <h2>请先登录</h2>
-          <Button 
-            label="前往登录" 
-            onClick={() => router.push('/login')}
-          />
-        </Card>
-      </div>
-    );
-  }
-  
   const userId = '1';
-  const router = useRouter();
   const [isMessageSidebarOpen, setIsMessageSidebarOpen] = useState(false);
   const [isAddressSidebarOpen, setIsAddressSidebarOpen] = useState(false);
   const [isOrderSidebarOpen, setIsOrderSidebarOpen] = useState(false);
-  const [orderStatusFilter, setOrderStatusFilter] = useState<'待发货' | '待收货' | null>(null);
+  const [orderStatusFilter, setOrderStatusFilter] = useState<'Shipment' | 'Receipt' | null>(null);
 
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
   const [formValues, setFormValues] = useState({
@@ -62,11 +41,11 @@ const MyPage: React.FC = () => {
   });
 
   const [addresses, setAddresses] = useState<Address[]>(() => {
-    return (loadFromStorage<Address[]>('addresses') ?? []).filter(addr => addr.userId.toString() === userId);
+    return (loadFromStorage<Address[]>('addresses') ?? []).filter(addr => addr.userId === userId);
   });
 
   const [orders] = useState<Order[]>(() => {
-    return (loadFromStorage<Order[]>('orders') ?? []).filter(order => order.userId.toString() === userId);
+    return (loadFromStorage<Order[]>('orders') ?? []).filter(order => order.userId === userId);
   });
 
   const [recommendedProducts] = useState<Product[]>(() => {
@@ -133,7 +112,8 @@ const MyPage: React.FC = () => {
     setIsFormOpen(true);
   };
 
-  const openOrderSidebar = (status: '待发货' | '待收货') => {
+  const openOrderSidebar = (status: 'Receipt' | 'Shipment') => {
+    console.log(orders);
     setOrderStatusFilter(status);
     setIsOrderSidebarOpen(true);
   };
@@ -144,32 +124,32 @@ const MyPage: React.FC = () => {
   return (
     <div className="mypage-container">
       <Card className="mypage-card">
-      <div className="mypage-user-info">
-        <Avatar icon="pi pi-user" shape="circle" size="xlarge" style={{ marginRight: '1rem' }} />
-        <div>
-          <h2>{currentUser.name}</h2>
-          {/* 新增退出按钮 ↓ */}
-          <Button 
-            icon="pi pi-sign-out" 
-            label="退出登录"
-            onClick={() => {
-              localStorage.removeItem('currentUser');
-              router.push('/login'); // 改为跳转到登录页
-            }}
-            severity="warning"
-            text
-            className="mt-2"
-          />
+        <div className="mypage-user-info">
+          <Avatar icon="pi pi-user" shape="circle" size="xlarge" style={{ marginRight: '1rem' }} />
+          <div>
+            <h2>F</h2>
+            {/* 新增退出按钮 ↓ */}
+            <Button
+              icon="pi pi-sign-out"
+              label="退出登录"
+              onClick={() => {
+                localStorage.removeItem('currentUser');
+                router.push('/login'); // 改为跳转到登录页
+              }}
+              severity="warning"
+              text
+              className="mt-2"
+            />
+          </div>
         </div>
-      </div>
 
         <div className="mypage-order-header">
           <h3>My Order</h3>
         </div>
 
         <div className="mypage-order-links">
-          <Button icon="pi pi-inbox" label="Shipment" onClick={() => openOrderSidebar('待发货')} text />
-          <Button icon="pi pi-truck" label="Receipt" onClick={() => openOrderSidebar('待收货')} text />
+          <Button icon="pi pi-inbox" label="Shipment" onClick={() => openOrderSidebar('Shipment')} text />
+          <Button icon="pi pi-truck" label="Receipt" onClick={() => openOrderSidebar('Receipt')} text />
         </div>
 
         <h3 className="mypage-section-title">More</h3>
@@ -191,7 +171,7 @@ const MyPage: React.FC = () => {
               >
                 <div className="product-img">
                   <Image
-                    src={`http://localhost:65/${item.image}`}
+                    src={process.env.NEXT_PUBLIC_NGINX_URL + item.image}
                     alt={item.name}
                     width="100%"
                     preview // 支持点击放大预览

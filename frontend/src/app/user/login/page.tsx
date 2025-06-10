@@ -5,8 +5,8 @@ import { Card } from 'primereact/card';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
-import { registerUser, loginUser } from '../user/userService';
-import '../login/login.scss';
+import { registerUser, loginUser } from '../userService';
+import './login.scss';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -24,7 +24,7 @@ export default function LoginPage() {
     try {
       if (isRegisterMode) {
         await registerUser(username, password);
-        alert('注册成功，请登录');
+        alert('Registration successful, please log in');
         setIsRegisterMode(false);
       }
       const user = await loginUser(username, password);
@@ -32,10 +32,10 @@ export default function LoginPage() {
         localStorage.setItem('currentUser', JSON.stringify(user));
         router.push('/');
       } else {
-        setErrorMessage('用户名或密码错误');
+        setErrorMessage('Invalid username or password');
       }
     } catch (err) {
-      setErrorMessage(err instanceof Error ? err.message : '操作失败');
+      setErrorMessage(err instanceof Error ? err.message : 'Operation failed');
     } finally {
       setLoading(false);
     }
@@ -43,37 +43,37 @@ export default function LoginPage() {
 
   return (
     <div className="login-wrapper">
-      <Card title={isRegisterMode ? '注册新用户' : '欢迎登录'} className="login-card">
+      <Card title={isRegisterMode ? 'Register New User' : 'Welcome to Login'} className="login-card">
         <form onSubmit={handleAuth} className="login-form">
           <div className="input-group">
-            <label htmlFor="username">用户名</label>
+            <label htmlFor="username">Username</label>
             <InputText
               id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="请输入用户名"
+              placeholder="Enter your username"
               required
             />
           </div>
           <div className="input-group">
-            <label htmlFor="password">密码</label>
+            <label htmlFor="password">Password</label>
             <Password
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               feedback={false}
               toggleMask
-              placeholder="请输入密码"
+              placeholder="Enter your password"
               required
             />
           </div>
 
           {errorMessage && <div className="error-message">{errorMessage}</div>}
 
-          <Button label={isRegisterMode ? '注册' : '登录'} type="submit" loading={loading} className="p-button-rounded w-full" />
+          <Button label={isRegisterMode ? 'Register' : 'Login'} type="submit" loading={loading} className="p-button-rounded w-full" />
 
           <Button
-            label={isRegisterMode ? '已有账号？去登录' : '没有账号？去注册'}
+            label={isRegisterMode ? 'Already have an account? Login' : "Don't have an account? Register"}
             type="button"
             className="p-button-text toggle-button"
             onClick={() => setIsRegisterMode(!isRegisterMode)}
