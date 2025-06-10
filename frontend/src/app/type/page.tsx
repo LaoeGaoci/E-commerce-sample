@@ -63,7 +63,7 @@ const CategoryPage: React.FC = () => {
                       style={{ cursor: 'pointer' }}
                     >
                       <img
-                        src={`http://localhost:65/${p.image}`}
+                        src={process.env.NEXT_PUBLIC_NGINX_URL + p.image}
                         alt={p.name}
                         style={{ width: '100%', objectFit: 'cover', borderRadius: '8px' }}
                       />

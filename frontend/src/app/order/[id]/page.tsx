@@ -10,11 +10,13 @@ import { Button } from 'primereact/button';
 import { Image } from 'primereact/image';
 import './OrderDetail.scss';
 import { useRouter } from 'next/navigation';
+
+
 export default function OrderDetailPage() {
   const { id } = useParams();
   const order = (loadFromStorage<Order[]>('orders') ?? []).find(o => o.id === id);
   const products = loadFromStorage<Product[]>('products') ?? [];
-const router = useRouter();
+  const router = useRouter();
   if (!order) return <p style={{ padding: '2rem' }}>订单不存在</p>;
 
   const stepItems = [
