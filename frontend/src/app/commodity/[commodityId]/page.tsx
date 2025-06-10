@@ -3,9 +3,10 @@
 import React, { useState } from 'react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { addToCart } from '../../cart/cartService';
+import { buyNow } from '../../order/orderService'; // ✅ 引入 buyNow 方法
 import { loadFromStorage } from '../../data/localStorageUtil';
 import { Product } from '../../data/products';
 import './ProductPage.scss';
@@ -13,6 +14,8 @@ import './ProductPage.scss';
 const EmptyPage: React.FC = () => {
   const [quantity, setQuantity] = useState(1);
   const params = useParams();
+  const router = useRouter();
+
   const commodityId = String(params?.commodityId);
 
   const products = loadFromStorage<Product[]>('products') || [];
@@ -22,12 +25,21 @@ const EmptyPage: React.FC = () => {
     return <div className="p-4 text-center text-red-500">商品不存在或参数错误</div>;
   }
 
-  // ✅ 过滤掉当前商品本身，防止出现在猜你喜欢中
   const recommended = products.filter(p => p.id !== product.id).slice(0, 4);
 
   const handleAddToCart = () => {
-    const userId = '1'; // TODO: Replace with real user logic
+    const userId = '1'; // 模拟用户ID
     addToCart(userId, product.id, quantity);
+  };
+
+  const handleBuyNow = () => {
+    const userId = '1'; // 模拟用户ID
+    const order = buyNow(userId, product.id, quantity); // ✅ 直接生成订单
+    if (order) {
+      router.push('/order');
+    } else {
+      alert('下单失败，商品不存在');
+    }
   };
 
   return (
@@ -58,7 +70,7 @@ const EmptyPage: React.FC = () => {
         </div>
 
         <div className="actions">
-          <button className="buy">Buy Now</button>
+          <button className="buy" onClick={handleBuyNow}>Buy Now</button>
           <button className="cart" onClick={handleAddToCart}>🛒</button>
         </div>
       </section>

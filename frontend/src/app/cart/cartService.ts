@@ -48,7 +48,7 @@ export const checkoutCart = (userId: string) => {
     id: uuidv4(),
     userId,
     productList: [...cart.products],
-    status: '待发货',
+    status: 'Receipt',
     totalPrice,
     orderType: 'cart',
     cartId: cart.id

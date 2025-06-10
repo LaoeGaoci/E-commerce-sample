@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { loadFromStorage } from './data/localStorageUtil';
 import { Product } from './data/products';
 import { Image } from 'primereact/image';
@@ -64,10 +65,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 分类区域 */}
+      {/* 分类区域（点击跳转分页页并传参 category） */}
       <section className="category-grid">
         {Array.from(new Set(allProducts.map(p => p.category))).map((cat) => (
-          <div className="category-item" key={cat}>{cat}</div>
+          <Link
+            key={cat}
+            href={`/type?category=${encodeURIComponent(cat)}`}
+            className="category-item"
+          >
+            {cat}
+          </Link>
         ))}
       </section>
 
