@@ -12,6 +12,7 @@ import './ProductPage.scss';
 const EmptyPage: React.FC = () => {
   const currentUser = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('currentUser') || '{}') : null;
   const userId = currentUser?.id || '';
+
   const [quantity, setQuantity] = useState(1);
   const params = useParams();
   const router = useRouter();
@@ -32,7 +33,7 @@ const EmptyPage: React.FC = () => {
   };
 
   const handleBuyNow = () => {
-    const order = buyNow(userId, product.id, quantity); 
+    const order = buyNow(userId, product.id, quantity);
     if (order) {
       router.push('/order');
     } else {

@@ -1,21 +1,25 @@
-import { loadFromStorage, saveToStorage } from '../data/localStorageUtil';
-import { Cart } from '../data/carts';
-import { Product } from '../data/products';
-import { Order } from '../data/orders';
-import { v4 as uuidv4 } from 'uuid';
+import { loadFromStorage, saveToStorage } from "../data/localStorageUtil";
+import { Cart } from "../data/carts";
+import { Product } from "../data/products";
+import { Order } from "../data/orders";
+import { v4 as uuidv4 } from "uuid";
 
 // 商品加入购物车
-export const addToCart = (userId: string, productId: string, quantity: number = 1) => {
-  const carts = loadFromStorage<Cart[]>('carts') || [];
-  const products = loadFromStorage<Product[]>('products') || [];
+export const addToCart = (
+  userId: string,
+  productId: string,
+  quantity: number = 1
+) => {
+  const carts = loadFromStorage<Cart[]>("carts") || [];
+  const products = loadFromStorage<Product[]>("products") || [];
 
-  let cart = carts.find(c => c.userId === userId);
+  let cart = carts.find((c) => c.userId === userId);
   if (!cart) {
     cart = { id: uuidv4(), userId, products: [], totalPrice: 0 };
     carts.push(cart);
   }
 
-  const existing = cart.products.find(p => p.productId === productId);
+  const existing = cart.products.find((p) => p.productId === productId);
   if (existing) {
     existing.quantity += quantity;
   } else {
@@ -23,24 +27,24 @@ export const addToCart = (userId: string, productId: string, quantity: number = 
   }
 
   cart.totalPrice = cart.products.reduce((total, item) => {
-    const prod = products.find(p => p.id === item.productId);
+    const prod = products.find((p) => p.id === item.productId);
     return total + (prod ? prod.price * item.quantity : 0);
   }, 0);
 
-  saveToStorage('carts', carts);
+  saveToStorage("carts", carts);
 };
 
 // 购物车结算
 export const checkoutCart = (userId: string): Order | null => {
-  const carts = loadFromStorage<Cart[]>('carts') || [];
-  const products = loadFromStorage<Product[]>('products') || [];
-  const orders = loadFromStorage<Order[]>('orders') || [];
+  const carts = loadFromStorage<Cart[]>("carts") || [];
+  const products = loadFromStorage<Product[]>("products") || [];
+  const orders = loadFromStorage<Order[]>("orders") || [];
 
-  const cart = carts.find(c => c.userId === userId);
+  const cart = carts.find((c) => c.userId === userId);
   if (!cart || cart.products.length === 0) return null;
 
   const totalPrice = cart.products.reduce((sum, item) => {
-    const prod = products.find(p => p.id === item.productId);
+    const prod = products.find((p) => p.id === item.productId);
     return sum + (prod ? prod.price * item.quantity : 0);
   }, 0);
 
@@ -48,38 +52,39 @@ export const checkoutCart = (userId: string): Order | null => {
     id: uuidv4(),
     userId,
     productList: [...cart.products],
-    status: 'Shipment',
+    status: "Shipment",
     totalPrice,
-    orderType: 'cart',       // ✅ 明确标记为“购物车结算”
-    cartId: cart.id,         // ✅ 记录来源购物车
+    orderType: "cart",
+    cartId: cart.id,
+    addressId: "",
   };
 
   orders.push(newOrder);
 
-  // ✅ 清空购物车
+  // 清空购物车
   cart.products = [];
   cart.totalPrice = 0;
 
-  saveToStorage('orders', orders);
-  saveToStorage('carts', carts);
+  saveToStorage("orders", orders);
+  saveToStorage("carts", carts);
 
   return newOrder;
 };
 
 // 删除购物车商品
 export const removeFromCart = (userId: string, productId: string) => {
-  const carts = loadFromStorage<Cart[]>('carts') || [];
-  const products = loadFromStorage<Product[]>('products') || [];
+  const carts = loadFromStorage<Cart[]>("carts") || [];
+  const products = loadFromStorage<Product[]>("products") || [];
 
-  const cart = carts.find(c => c.userId === userId);
+  const cart = carts.find((c) => c.userId === userId);
   if (!cart) return;
 
-  cart.products = cart.products.filter(p => p.productId !== productId);
+  cart.products = cart.products.filter((p) => p.productId !== productId);
 
   cart.totalPrice = cart.products.reduce((sum, item) => {
-    const prod = products.find(p => p.id === item.productId);
+    const prod = products.find((p) => p.id === item.productId);
     return sum + (prod ? prod.price * item.quantity : 0);
   }, 0);
 
-  saveToStorage('carts', carts);
+  saveToStorage("carts", carts);
 };
