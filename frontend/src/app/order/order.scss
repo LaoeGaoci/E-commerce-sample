@@ -129,3 +129,16 @@
     }
   }
 }
+
+.address-item {
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.address-item.selected {
+  border-color: #4f46e5;
+  background-color: #eef;
+}

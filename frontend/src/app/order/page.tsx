@@ -11,26 +11,31 @@ import { loadFromStorage } from '../data/localStorageUtil';
 import { Order } from '../data/orders';
 import { Product } from '../data/products';
 import { useRouter } from 'next/navigation';
-import { markOrderAsReceived } from './orderService';
+import { markOrderAsReceived, addOrderAddress } from './orderService';
+import { Address } from '../data/addresses';
 import './order.scss';
 
 export default function OrderPage() {
   const currentUser = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('currentUser') || '{}') : null;
   const userId = currentUser?.id || '';
-  
+
   const router = useRouter();
   const toast = useRef<Toast>(null);
   const [orders, setOrders] = useState<Order[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [showSuccess, setShowSuccess] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
-
+  // 地址信息
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
   useEffect(() => {
     if (!userId) return;
     const allOrders = loadFromStorage<Order[]>('orders') || [];
     const userOrders = allOrders.filter(order => order.userId === userId);
     const allProducts = loadFromStorage<Product[]>('products') || [];
-
+    const allAddresses = loadFromStorage<Address[]>('addresses') || [];
+    const userAddresses = allAddresses.filter(addr => addr.userId === userId);
+    setAddresses(userAddresses);
     setOrders(userOrders);
     setProducts(allProducts);
   }, [userId]);
@@ -47,11 +52,12 @@ export default function OrderPage() {
   };
 
   const onConfirm = () => {
+    if (!selectedOrderId || !selectedAddressId) return;
     setShowSuccess(false);
-    if (selectedOrderId) {
-      router.push(`/order/${selectedOrderId}`); // ✅ 跳转到物流详情页
-    }
+    addOrderAddress(selectedOrderId, selectedAddressId);
+    router.push(`/order/${selectedOrderId}`); // ✅ 跳转到物流详情页
   };
+
   return (
     <div className="order-page">
       <Toast ref={toast} />
@@ -87,14 +93,27 @@ export default function OrderPage() {
       )}
       {/* ✅ 支付成功弹窗 */}
       <Dialog
-        header="支付成功"
+        header="选择收货地址"
         visible={showSuccess}
         onHide={() => setShowSuccess(false)}
         footer={
-          <Button label="查看物流信息" icon="pi pi-check" onClick={onConfirm} autoFocus />
+          <Button
+            label="确认支付并查看物流"
+            icon="pi pi-check"
+            onClick={onConfirm}
+            disabled={!selectedAddressId}
+          />
         }
       >
-        <p>您已成功完成支付！请点击下方按钮查看订单物流详情。</p>
+        <p>请选择一个收货地址：</p>
+        <div className="address-list">
+          {addresses.map(addr => (
+            <div key={addr.id} className={`address-item ${selectedAddressId === addr.id ? 'selected' : ''}`} onClick={() => setSelectedAddressId(addr.id)}>
+              <p>{addr.receiverName} - {addr.receiverPhone}</p>
+              <p>{addr.receiverAddress}</p>
+            </div>
+          ))}
+        </div>
       </Dialog>
     </div>
   );

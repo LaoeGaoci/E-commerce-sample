@@ -9,6 +9,8 @@ import { Steps } from 'primereact/steps';
 import { Button } from 'primereact/button';
 import { Image } from 'primereact/image';
 import './OrderDetail.scss';
+import { Address } from '../../data/addresses';
+
 import { useRouter } from 'next/navigation';
 
 
@@ -17,7 +19,12 @@ export default function OrderDetailPage() {
   const order = (loadFromStorage<Order[]>('orders') ?? []).find(o => o.id === id);
   const products = loadFromStorage<Product[]>('products') ?? [];
   const router = useRouter();
+
   if (!order) return <p style={{ padding: '2rem' }}>订单不存在</p>;
+  const addresses = loadFromStorage<Address[]>('addresses') ?? [];
+  const address = addresses.find(
+    (a) => a.id === order.addressId && a.userId === order.userId
+  );
 
   const stepItems = [
     { label: '订单已提交' },
@@ -39,7 +46,13 @@ export default function OrderDetailPage() {
     <div className="order-detail-container">
       <h2 className="order-title">订单详情</h2>
       <div className="order-status">状态：{order.status}</div>
-
+      {address && (
+        <div className="order-address">
+          <h4>收货地址</h4>
+          <p>{address.receiverName}（{address.receiverPhone}）</p>
+          <p>{address.receiverAddress}</p>
+        </div>
+      )}
       <div className="order-steps">
         <Steps model={stepItems} activeIndex={activeIndex} readOnly />
       </div>
