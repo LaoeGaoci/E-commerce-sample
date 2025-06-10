@@ -3,10 +3,10 @@ import { Product } from '../data/products';
 import { Order } from '../data/orders';
 import { v4 as uuidv4 } from 'uuid';
 
-export const buyNow = (userId: string, productId: string, quantity: number = 1) => {
+export const buyNow = (userId: string, productId: string, quantity: number = 1): Order | null => {
   const orders = loadFromStorage<Order[]>('orders') || [];
   const products = loadFromStorage<Product[]>('products') || [];
-  
+
   const product = products.find(p => p.id === productId);
   if (!product) return null;
 
@@ -14,12 +14,27 @@ export const buyNow = (userId: string, productId: string, quantity: number = 1) 
     id: uuidv4(),
     userId,
     productList: [{ productId, quantity }],
-    status: 'Receipt',
+    status: 'Shipment',
     totalPrice: product.price * quantity,
-    orderType: 'direct'
+    orderType: 'direct',       // ✅ 明确标记为“直接购买”
   };
 
   orders.push(newOrder);
   saveToStorage('orders', orders);
   return newOrder;
+};
+
+/**
+ * 将指定订单状态修改为 'Receipt'
+ * @param orderId 要修改的订单 ID
+ * @returns 是否修改成功
+ */
+export const markOrderAsReceived = (orderId: string): boolean => {
+  const orders = loadFromStorage<Order[]>('orders') || [];
+  const order = orders.find(o => o.id === orderId);
+  if (!order) return false;
+
+  order.status = 'Receipt';
+  saveToStorage('orders', orders);
+  return true;
 };

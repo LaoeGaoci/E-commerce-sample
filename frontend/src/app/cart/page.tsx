@@ -1,9 +1,6 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import { loadFromStorage } from '../data/localStorageUtil';
 import { Cart } from '../data/carts';
 import { Product } from '../data/products';
@@ -19,7 +16,7 @@ const EmptyPage: React.FC = () => {
 
   const carts = loadFromStorage<Cart[]>('carts') || [];
   const products = loadFromStorage<Product[]>('products') || [];
-
+  const router = useRouter();
   const cart = carts.find((c) => c.userId === userId);
   const cartItems = cart?.products || [];
 
@@ -42,8 +39,6 @@ const EmptyPage: React.FC = () => {
 
   return (
     <main className="cart-page">
-      <Header />
-
       <div className="cart-content">
         <section className="cart-section">
           <h2 className="cart-title">Shopping Cart</h2>
@@ -54,13 +49,14 @@ const EmptyPage: React.FC = () => {
             const product = getProductInfo(item.productId);
             if (!product) return null;
             return (
-              <Link href={`/commodity/${product.id}`} key={product.id} className="cart-item">
+              <div key={product.id} className="cart-item" onClick={() => router.push(`/commodity/${product.id}`)}>
                 <Image
                   src={process.env.NEXT_PUBLIC_NGINX_URL + product.image}
                   alt={product.name}
                   width="80"
                   height="80"
                   className="cart-item-img"
+                  onClick={(e) => e.stopPropagation()}
                 />
                 <div className="cart-item-info">
                   <div className="cart-item-name">{product.name}</div>
@@ -70,12 +66,12 @@ const EmptyPage: React.FC = () => {
                 </div>
                 <button
                   className="cart-item-remove"
-                  onClick={(e) => handleRemove(e, product.id)}
+                  onClick={(e) => {e.stopPropagation(); handleRemove(e, product.id);}}
                   aria-label="Remove item"
                 >
                   x
                 </button>
-              </Link>
+              </div>
             );
           })}
         </section>
@@ -93,8 +89,6 @@ const EmptyPage: React.FC = () => {
           </div>
         )}
       </div>
-
-      <Footer />
     </main>
   );
 };

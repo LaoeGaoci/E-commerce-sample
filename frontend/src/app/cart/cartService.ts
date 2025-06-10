@@ -31,13 +31,13 @@ export const addToCart = (userId: string, productId: string, quantity: number = 
 };
 
 // 购物车结算
-export const checkoutCart = (userId: string) => {
+export const checkoutCart = (userId: string): Order | null => {
   const carts = loadFromStorage<Cart[]>('carts') || [];
   const products = loadFromStorage<Product[]>('products') || [];
   const orders = loadFromStorage<Order[]>('orders') || [];
 
   const cart = carts.find(c => c.userId === userId);
-  if (!cart || cart.products.length === 0) return;
+  if (!cart || cart.products.length === 0) return null;
 
   const totalPrice = cart.products.reduce((sum, item) => {
     const prod = products.find(p => p.id === item.productId);
@@ -48,18 +48,22 @@ export const checkoutCart = (userId: string) => {
     id: uuidv4(),
     userId,
     productList: [...cart.products],
-    status: 'Receipt',
+    status: 'Shipment',
     totalPrice,
-    orderType: 'cart',
-    cartId: cart.id
+    orderType: 'cart',       // ✅ 明确标记为“购物车结算”
+    cartId: cart.id,         // ✅ 记录来源购物车
   };
 
   orders.push(newOrder);
+
+  // ✅ 清空购物车
   cart.products = [];
   cart.totalPrice = 0;
 
   saveToStorage('orders', orders);
   saveToStorage('carts', carts);
+
+  return newOrder;
 };
 
 // 删除购物车商品
