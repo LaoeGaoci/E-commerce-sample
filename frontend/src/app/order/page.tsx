@@ -14,7 +14,9 @@ import { useRouter } from 'next/navigation';
 import './order.scss';
 
 export default function OrderPage() {
-  const userId = '1';
+  const currentUser = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('currentUser') || '{}') : null;
+  const userId = currentUser?.id || '';
+  
   const router = useRouter();
   const toast = useRef<Toast>(null);
   const [orders, setOrders] = useState<Order[]>([]);
