@@ -12,6 +12,8 @@ import { Product } from '../../data/products';
 import './ProductPage.scss';
 
 const EmptyPage: React.FC = () => {
+  const currentUser = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('currentUser') || '{}') : null;
+  const userId = currentUser?.id || '';
   const [quantity, setQuantity] = useState(1);
   const params = useParams();
   const router = useRouter();
@@ -28,7 +30,6 @@ const EmptyPage: React.FC = () => {
   const recommended = products.filter(p => p.id !== product.id).slice(0, 4);
 
   const handleAddToCart = () => {
-    const userId = '1'; // 模拟用户ID
     addToCart(userId, product.id, quantity);
   };
 
@@ -55,7 +56,7 @@ const EmptyPage: React.FC = () => {
         </div>
 
         <div className="product-image">
-          <img src={`http://localhost:65/${product.image}`} alt="Product Image" />
+          <img src={process.env.NEXT_PUBLIC_NGINX_URL + product.image} alt="Product Image" />
         </div>
 
         <div className="product-price">
@@ -82,7 +83,7 @@ const EmptyPage: React.FC = () => {
           {recommended.map((item) => (
             <Link href={`/commodity/${item.id}`} key={item.id} className="product-card">
               <div className="product-img">
-                <img src={`http://localhost:65/${item.image}`} alt={item.name} />
+                <img src={process.env.NEXT_PUBLIC_NGINX_URL + item.image} alt={item.name} />
               </div>
               <div className="product-title">{item.name}</div>
               <div className="product-price">${item.price}</div>

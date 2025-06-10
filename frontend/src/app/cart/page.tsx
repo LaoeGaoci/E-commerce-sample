@@ -13,8 +13,9 @@ import { useRouter } from 'next/navigation';
 import './CartPage.scss';
 
 const EmptyPage: React.FC = () => {
-  const userId = '1'; // 模拟登录用户ID
-  const router = useRouter();
+
+  const currentUser = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('currentUser') || '{}') : null;
+  const userId = currentUser?.id || '';
 
   const carts = loadFromStorage<Cart[]>('carts') || [];
   const products = loadFromStorage<Product[]>('products') || [];

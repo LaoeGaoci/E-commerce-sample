@@ -1,65 +1,86 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Image } from 'primereact/image';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { Product } from '../data/products';
 import { loadFromStorage, saveToStorage } from '../data/localStorageUtil';
+import { addToCart } from '../cart/cartService';
+import { useRouter } from 'next/navigation';
 import './commodity.scss';
 
-const initialProducts: Product[] = []
+const initialProducts: Product[] = [];
 
 const CommodityListPage: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [cartItems, setCartItems] = useState<Product[]>([]);
+  const currentUser = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('currentUser') || '{}') : null;
+  const userId = currentUser?.id || '';
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const searchParams = useSearchParams();
+  const query = searchParams.get('query')?.toLowerCase() || '';
+  const router = useRouter();
 
-  // 初始化加载商品数据
   useEffect(() => {
     const storedProducts = loadFromStorage<Product[]>('products');
-    if (storedProducts) {
-      setProducts(storedProducts);
+    const products = storedProducts || initialProducts;
+
+    if (query) {
+      const matched = products.filter(p =>
+        p.name.toLowerCase().includes(query)
+      );
+      setFilteredProducts(matched);
     } else {
-      // 如果没有存储数据，则使用初始数据
-      setProducts(initialProducts);
+      setFilteredProducts(products);
+    }
+
+    if (!storedProducts) {
       saveToStorage('products', initialProducts);
     }
+  }, [query]);
 
-    // 加载购物车数据
-    const storedCart = loadFromStorage<Product[]>('cart');
-    if (storedCart) {
-      setCartItems(storedCart);
-    }
-  }, []);
-
-  // 添加到购物车
-  const addToCart = (product: Product) => {
-    const updatedCart = [...cartItems, product];
-    setCartItems(updatedCart);
-    saveToStorage('cart', updatedCart);
+  const handleAddToCart = (product: Product) => {
+    addToCart(userId, product.id, 1);
   };
 
   return (
     <div className="commodity-container">
-      <h2 className="commodity-title">Product List</h2>
-      <div className="commodity-grid">
-        {products.map(product => (
-          <Card key={product.id} className="commodity-card">
-            <Link href={`/commodity/${product.id}`} className="commodity-link">
-              <Image src={`/${product.image}`} alt={product.name} />
-              <h4>{product.name}</h4>
-              <p>¥{product.price}</p>
-            </Link>
-            <Button
-              label="Add to Cart"
-              icon="pi pi-shopping-cart"
-              onClick={() => addToCart(product)}
-              className="p-button-sm mt-2"
-            />
-          </Card>
-        ))}
-      </div>
+      <h2 className="Search-Title">
+        {query ? `Search results for "${query}"` : 'All Products'}
+      </h2>
+      {filteredProducts.length === 0 ? (
+        <p className="text-gray-500">No matching products found.</p>
+      ) : (
+        <div className="commodityList">
+          {filteredProducts.map(product => (
+            <Card key={product.id} className='commodity-card' onClick={() => router.push(`/commodity/${product.id}`)}>
+              <div className="commodity-item">
+                <Image
+                  src={process.env.NEXT_PUBLIC_NGINX_URL + product.image}
+                  alt={product.name}
+                  width="150"
+                  height="150"
+                  preview
+                  onClick={(e) => e.stopPropagation()}
+                />
+                <div className="commodity-info">
+                  <h5>{product.name}</h5>
+                  <p>{product.description}</p>
+                  <div className="buy-commodity">
+                    <span className="price">¥{product.price}</span>
+                    <Button
+                      label="Add"
+                      icon="pi pi-shopping-cart"
+                      onClick={(e) => { e.stopPropagation(); handleAddToCart(product); }}
+                      className="add-cart"
+                    />
+                  </div>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
