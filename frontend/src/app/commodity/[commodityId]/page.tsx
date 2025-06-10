@@ -7,6 +7,8 @@ import { addToCart } from '../../cart/cartService';
 import { buyNow } from '../../order/orderService';
 import { loadFromStorage } from '../../data/localStorageUtil';
 import { Product } from '../../data/products';
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 import './ProductPage.scss';
 
 const EmptyPage: React.FC = () => {
@@ -43,6 +45,7 @@ const EmptyPage: React.FC = () => {
 
   return (
     <main className="product-page">
+      <Header />
       <section className="product-info">
         <h1 className="product-title">{product.name}</h1>
         <p className="product-subtitle">{product.description}</p>
@@ -87,6 +90,7 @@ const EmptyPage: React.FC = () => {
           ))}
         </div>
       </section>
+      <Footer />
     </main>
   );
 };

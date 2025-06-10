@@ -6,6 +6,8 @@ import { Image } from 'primereact/image';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { Product } from '../data/products';
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import { loadFromStorage, saveToStorage } from '../data/localStorageUtil';
 import { addToCart } from '../cart/cartService';
 import { useRouter } from 'next/navigation';
@@ -45,6 +47,7 @@ const CommodityListPage: React.FC = () => {
 
   return (
     <div className="commodity-container">
+      <Header />
       <h2 className="Search-Title">
         {query ? `Search results for "${query}"` : 'All Products'}
       </h2>
@@ -81,6 +84,7 @@ const CommodityListPage: React.FC = () => {
           ))}
         </div>
       )}
+      <Footer />
     </div>
   );
 };

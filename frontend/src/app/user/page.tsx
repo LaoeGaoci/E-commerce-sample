@@ -9,7 +9,8 @@ import { Card } from 'primereact/card';
 import { Dialog } from 'primereact/dialog';
 import { Sidebar } from 'primereact/sidebar';
 import { InputText } from 'primereact/inputtext';
-
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import { Address } from '../data/addresses';
 import { Product } from '../data/products';
 import { Order } from '../data/orders';
@@ -126,6 +127,7 @@ const MyPage: React.FC = () => {
 
   return (
     <div className="mypage-container">
+      <Header />
       <Card className="mypage-card">
         <div className="mypage-user-info">
           <Avatar icon="pi pi-user" image="https://primefaces.org/cdn/primereact/images/avatar/amyelsner.png" shape="circle" size="xlarge" style={{ marginRight: '1rem' }} />
@@ -282,6 +284,7 @@ const MyPage: React.FC = () => {
           </div>
         </div>
       </Dialog>
+      <Footer />
     </div>
   );
 };
