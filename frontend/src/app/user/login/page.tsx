@@ -28,9 +28,14 @@ export default function LoginPage() {
         setIsRegisterMode(false);
       }
       const user = await loginUser(username, password);
+
       if (user) {
         localStorage.setItem('currentUser', JSON.stringify(user));
-        router.push('/');
+        if (user.name === 'admin') {
+          router.push('/backend');
+        } else {
+          router.push('/');
+        }
       } else {
         setErrorMessage('Invalid username or password');
       }

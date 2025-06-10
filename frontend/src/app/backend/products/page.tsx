@@ -10,8 +10,8 @@ import { InputText } from 'primereact/inputtext';
 import { Dialog } from 'primereact/dialog';
 import { InputNumber } from 'primereact/inputnumber';
 import { Dropdown } from 'primereact/dropdown';
-import { Product, initialProducts } from '../../../../frontend/src/app/data/products';
-import { saveToStorage, loadFromStorage } from '@/mock/localStorageUtil';
+import { Product, initialProducts } from '../../data/products';
+import { loadFromStorage, saveToStorage } from '../../data/localStorageUtil';
 
 
 

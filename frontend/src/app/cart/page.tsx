@@ -4,6 +4,8 @@ import React from 'react';
 import { loadFromStorage } from '../data/localStorageUtil';
 import { Cart } from '../data/carts';
 import { Product } from '../data/products';
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import { removeFromCart, checkoutCart } from './cartService';
 import { Image } from 'primereact/image';
 import { useRouter } from 'next/navigation';
@@ -39,6 +41,7 @@ const EmptyPage: React.FC = () => {
 
   return (
     <main className="cart-page">
+      <Header />
       <div className="cart-content">
         <section className="cart-section">
           <h2 className="cart-title">Shopping Cart</h2>
@@ -66,7 +69,7 @@ const EmptyPage: React.FC = () => {
                 </div>
                 <button
                   className="cart-item-remove"
-                  onClick={(e) => {e.stopPropagation(); handleRemove(e, product.id);}}
+                  onClick={(e) => { e.stopPropagation(); handleRemove(e, product.id); }}
                   aria-label="Remove item"
                 >
                   x
@@ -89,6 +92,7 @@ const EmptyPage: React.FC = () => {
           </div>
         )}
       </div>
+      <Footer />
     </main>
   );
 };

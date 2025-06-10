@@ -11,6 +11,8 @@ import { loadFromStorage } from '../data/localStorageUtil';
 import { Order } from '../data/orders';
 import { Product } from '../data/products';
 import { useRouter } from 'next/navigation';
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import { markOrderAsReceived, addOrderAddress } from './orderService';
 import { Address } from '../data/addresses';
 import './order.scss';
@@ -60,6 +62,7 @@ export default function OrderPage() {
 
   return (
     <div className="order-page">
+      <Header />
       <Toast ref={toast} />
       <h1>Order</h1>
       {orders.length === 0 ? (
@@ -93,19 +96,19 @@ export default function OrderPage() {
       )}
       {/* ✅ 支付成功弹窗 */}
       <Dialog
-        header="选择收货地址"
+        header="Choose Address"
         visible={showSuccess}
         onHide={() => setShowSuccess(false)}
         footer={
           <Button
-            label="确认支付并查看物流"
+            label="Check Logistic"
             icon="pi pi-check"
             onClick={onConfirm}
             disabled={!selectedAddressId}
           />
         }
       >
-        <p>请选择一个收货地址：</p>
+        <p>Choose Address</p>
         <div className="address-list">
           {addresses.map(addr => (
             <div key={addr.id} className={`address-item ${selectedAddressId === addr.id ? 'selected' : ''}`} onClick={() => setSelectedAddressId(addr.id)}>
@@ -115,6 +118,7 @@ export default function OrderPage() {
           ))}
         </div>
       </Dialog>
+      <Footer />
     </div>
   );
 }

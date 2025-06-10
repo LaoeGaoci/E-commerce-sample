@@ -8,6 +8,8 @@ import { Card } from 'primereact/card';
 import { Steps } from 'primereact/steps';
 import { Button } from 'primereact/button';
 import { Image } from 'primereact/image';
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 import './OrderDetail.scss';
 import { Address } from '../../data/addresses';
 
@@ -20,36 +22,38 @@ export default function OrderDetailPage() {
   const products = loadFromStorage<Product[]>('products') ?? [];
   const router = useRouter();
 
-  if (!order) return <p style={{ padding: '2rem' }}>订单不存在</p>;
+  if (!order) return <p style={{ padding: '2rem' }}>No Order</p>;
   const addresses = loadFromStorage<Address[]>('addresses') ?? [];
   const address = addresses.find(
     (a) => a.id === order.addressId && a.userId === order.userId
   );
 
   const stepItems = [
-    { label: '订单已提交' },
-    { label: '仓库打包' },
-    { label: '已发货' },
-    { label: '运输中' },
-    { label: '已送达' }
+    { label: 'Submitted' },
+    { label: 'Warehouse' },
+    { label: 'Shipped' },
+    { label: 'Transit' },
+    { label: 'Delivered' }
   ];
+
 
   // 模拟状态：映射到当前物流步骤索引
   const statusStepMap: Record<string, number> = {
-    '待发货': 1, // 仓库打包
-    '待收货': 3, // 运输中
+    'Shipment': 1, // 仓库打包
+    'Receipt': 3, // 运输中
   };
 
   const activeIndex = statusStepMap[order.status] ?? 0;
 
   return (
     <div className="order-detail-container">
-      <h2 className="order-title">订单详情</h2>
-      <div className="order-status">状态：{order.status}</div>
+      <Header />
+      <h2 className="order-title">Order Detial</h2>
+      <div className="order-status">Status: {order.status}</div>
       {address && (
         <div className="order-address">
-          <h4>收货地址</h4>
-          <p>{address.receiverName}（{address.receiverPhone}）</p>
+          <h4>Address</h4>
+          <p>{address.receiverName}({address.receiverPhone})</p>
           <p>{address.receiverAddress}</p>
         </div>
       )}
@@ -74,9 +78,9 @@ export default function OrderDetailPage() {
                 />
                 <div className="product-details">
                   <h4>{product.name}</h4>
-                  <p>单价：¥{product.price}</p>
-                  <p>数量：{item.quantity}</p>
-                  <p>总计：¥{(product.price * item.quantity).toFixed(2)}</p>
+                  <p>Price: ¥{product.price}</p>
+                  <p>Quantity: {item.quantity}</p>
+                  <p>Total: ¥{(product.price * item.quantity).toFixed(2)}</p>
                 </div>
               </div>
             </Card>
@@ -85,9 +89,10 @@ export default function OrderDetailPage() {
       </div>
 
       <div className="order-total">
-        <h3>订单总价：¥{order.totalPrice.toFixed(2)}</h3>
+        <h3>Total: ¥{order.totalPrice.toFixed(2)}</h3>
         <Button label="返回我的订单" icon="pi pi-arrow-left" className="mt-3" onClick={() => router.push(`/user`)} />
       </div>
+      <Footer />
     </div>
   );
 };

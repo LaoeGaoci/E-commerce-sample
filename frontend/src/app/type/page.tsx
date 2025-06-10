@@ -7,6 +7,8 @@ import { Product } from '../data/products';
 import Link from 'next/link';
 import { ListBox } from 'primereact/listbox';
 import { Card } from 'primereact/card';
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import './CategoryPage.scss';
 
 const CategoryPage: React.FC = () => {
@@ -38,6 +40,7 @@ const CategoryPage: React.FC = () => {
 
   return (
     <main className="category-page">
+      <Header />
       <section className="category-container p-d-flex">
         {/* 左侧分类栏 */}
         <div className="category-sidebar">
@@ -78,6 +81,7 @@ const CategoryPage: React.FC = () => {
           )}
         </div>
       </section>
+      <Footer />
     </main>
   );
 };
